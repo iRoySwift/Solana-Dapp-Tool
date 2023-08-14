@@ -9,7 +9,6 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
 import React from "react";
 import { styled } from "@mui/material";
-import zIndex from "@mui/material/styles/zIndex";
 
 const WalletModalProviderStyled = styled(WalletModalProvider)(() => ({
     zIndex: 2000,

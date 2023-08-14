@@ -1,4 +1,3 @@
-import initializeKeypair from "@/utils/solana/initializeKeypair";
 import {
     Box,
     Button,
@@ -26,13 +25,13 @@ const Item = styled(Box)(({ theme }) => ({
     // color: theme.palette.text.secondary,
 }));
 
+const TO_PUBLIC_KEY = "HQ9Jn1KNwKyPkDyBmQtXtMWn1DXP52jRGzahx3U2Wfky";
+
 interface Props {}
 const WalletAdapter: React.FC<Props> = () => {
     const { publicKey: pubkey, sendTransaction } = useWallet();
     const [balance, setBalance] = useState(0);
-    const [toPubkey, setToPubkey] = useState(
-        "HQ9Jn1KNwKyPkDyBmQtXtMWn1DXP52jRGzahx3U2Wfky"
-    );
+    const [toPubkey, setToPubkey] = useState(TO_PUBLIC_KEY);
     const [count, SetCount] = useState(0);
     // const connection = new Connection("https://api.devnet.solana.com");
     const { connection } = useConnection();
