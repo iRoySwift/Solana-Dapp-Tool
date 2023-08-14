@@ -1,0 +1,3 @@
+const useAppLanguage = () => {};
+
+export { useAppLanguage };

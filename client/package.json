@@ -1,0 +1,86 @@
+{
+    "name": "solana_tools_client",
+    "version": "1.0.0",
+    "private": true,
+    "homepage": ".",
+    "description": "Template for Create React App supporting TypeScript with Prettier and ESlint config recommended by react-app.",
+    "dependencies": {
+        "@emotion/react": "^11.10.5",
+        "@emotion/styled": "^11.10.5",
+        "@mui/icons-material": "^5.6.1",
+        "@mui/material": "^5.10.13",
+        "@mui/x-data-grid": "^5.17.12",
+        "@reduxjs/toolkit": "^1.9.2",
+        "@solana/wallet-adapter-base": "^0.9.23",
+        "@solana/wallet-adapter-material-ui": "^0.16.32",
+        "@solana/wallet-adapter-react": "^0.15.34",
+        "@solana/wallet-adapter-wallets": "^0.19.20",
+        "@solana/web3.js": "^1.78.4",
+        "bs58": "^5.0.0",
+        "dotenv": "^16.3.1",
+        "echarts": "^5.4.2",
+        "formik": "^2.4.2",
+        "framer-motion": "^10.12.21",
+        "i18next": "^22.0.4",
+        "notistack": "^3.0.1",
+        "react": "^18.0.0",
+        "react-app-alias": "^2.2.2",
+        "react-device-detect": "^2.2.2",
+        "react-dom": "^18.0.0",
+        "react-i18next": "^12.0.0",
+        "react-redux": "^8.0.5",
+        "react-router-dom": "^6.4.3",
+        "react-scripts": "5.0.1",
+        "simplebar-react": "^3.2.0",
+        "yup": "^1.2.0"
+    },
+    "devDependencies": {
+        "@craco/craco": "^7.1.0",
+        "@testing-library/jest-dom": "^5.16.2",
+        "@testing-library/react": "^13.0.1",
+        "@testing-library/user-event": "^14.1.0",
+        "@types/jest": "^29.2.2",
+        "@types/node": "^18.11.9",
+        "@types/react": "^18.0.25",
+        "@types/react-dom": "^18.0.8",
+        "@types/react-redux": "^7.1.25",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "husky": "^8.0.2",
+        "prettier": "^2.8.3",
+        "typescript": "~4.8.4",
+        "web-vitals": "^3.0.4"
+    },
+    "scripts": {
+        "start": "craco start",
+        "build": "craco build",
+        "test": "craco test",
+        "eject": "react-scripts eject",
+        "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+        "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "yarn lint && yarn lint:css"
+        }
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest",
+            "plugin:prettier/recommended"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
+}
