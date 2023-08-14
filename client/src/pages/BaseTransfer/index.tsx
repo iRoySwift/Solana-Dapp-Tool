@@ -27,7 +27,7 @@ const Item = styled(Box)(({ theme }) => ({
 }));
 
 interface Props {}
-const Airdrop: React.FC<Props> = () => {
+const BaseTransfer: React.FC<Props> = () => {
     const [pubkey, setPubkey] = useState<String>();
     const [balance, setBalance] = useState(0);
     const [toPubkey, setToPubkey] = useState(
@@ -196,4 +196,4 @@ const Airdrop: React.FC<Props> = () => {
         </>
     );
 };
-export default Airdrop;
+export default BaseTransfer;
