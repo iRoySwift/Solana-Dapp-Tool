@@ -5,6 +5,8 @@
             "dashboard": "面板",
             "authentication": "授权",
             "airdrop": "空投",
+            "baseTransfer": "基础转账",
+            "walletAdapter": "钱包适配器",
             "login": "登录",
             "register": "注册",
             "utilities": "工具",

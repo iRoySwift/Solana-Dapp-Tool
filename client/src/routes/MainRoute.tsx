@@ -3,7 +3,8 @@ import { type RouteObject } from "react-router-dom";
 import Loadable from "@/components/Loadable";
 
 import MainLayout from "@/layout/MainLayout";
-const Airdrop = Loadable(lazy(() => import("@/pages/Airdrop")));
+const BaseTransfer = Loadable(lazy(() => import("@/pages/BaseTransfer")));
+const Airdrop = Loadable(lazy(() => import("@/pages/WalletAdapter")));
 const DashBoard = Loadable(lazy(() => import("@/pages/dashboard")));
 const Colors = Loadable(
     lazy(() => import("@/pages/OverviewComponents/Colors"))
@@ -24,7 +25,11 @@ const MainRoute: RouteObject = {
             element: <DashBoard />,
         },
         {
-            path: "airdrop",
+            path: "baseTransfer",
+            element: <BaseTransfer />,
+        },
+        {
+            path: "walletAdapter",
             element: <Airdrop />,
         },
         {

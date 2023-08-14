@@ -18,7 +18,7 @@ import React, { useRef, useState } from "react";
 import avatar1 from "@/assets/images/users/avatar-1.png";
 import Transitions from "@/components/@extended/Transitions";
 import MainCard from "@/pages/OverviewComponents/components/MainCard";
-import { Theme } from "@mui/material/styles";
+import { type Theme } from "@mui/material/styles";
 import {
     Logout as LogoutIcon,
     Person as PersonIcon,

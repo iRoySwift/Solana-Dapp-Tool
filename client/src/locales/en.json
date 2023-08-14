@@ -5,6 +5,8 @@
             "dashboard": "Dashboard",
             "authentication": "Authentication",
             "airdrop": "Airdrop",
+            "baseTransfer": "BaseTransfer",
+            "walletAdapter": "Wallet Adapter",
             "login": "Login",
             "register": "Register",
             "utilities": "Utilities",
