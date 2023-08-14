@@ -22,22 +22,6 @@ const dashboard = {
             icon: icons.Window,
             breadcrumbs: false,
         },
-        {
-            id: "walletAdapter",
-            title: "Wallet adapter",
-            type: "item",
-            url: "/walletAdapter",
-            icon: icons.Window,
-            breadcrumbs: false,
-        },
-        {
-            id: "baseTransfer",
-            title: "Base Transfer",
-            type: "item",
-            url: "/baseTransfer",
-            icon: icons.Window,
-            breadcrumbs: false,
-        },
     ],
 };
 

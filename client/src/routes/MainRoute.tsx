@@ -3,8 +3,7 @@ import { type RouteObject } from "react-router-dom";
 import Loadable from "@/components/Loadable";
 
 import MainLayout from "@/layout/MainLayout";
-const BaseTransfer = Loadable(lazy(() => import("@/pages/BaseTransfer")));
-const Airdrop = Loadable(lazy(() => import("@/pages/WalletAdapter")));
+
 const DashBoard = Loadable(lazy(() => import("@/pages/dashboard")));
 const Colors = Loadable(
     lazy(() => import("@/pages/OverviewComponents/Colors"))
@@ -15,6 +14,11 @@ const Typography = Loadable(
 const MuiIcon = Loadable(
     lazy(() => import("@/pages/OverviewComponents/MuiIcon"))
 );
+const Tutorial = Loadable(lazy(() => import("@/pages/Tutorial")));
+const BaseTransfer = Loadable(
+    lazy(() => import("@/pages/Tutorial/BaseTransfer"))
+);
+const Airdrop = Loadable(lazy(() => import("@/pages/Tutorial/WalletAdapter")));
 
 const MainRoute: RouteObject = {
     path: "/",
@@ -22,15 +26,22 @@ const MainRoute: RouteObject = {
     children: [
         {
             path: "/",
+            index: true,
             element: <DashBoard />,
         },
         {
-            path: "baseTransfer",
-            element: <BaseTransfer />,
-        },
-        {
-            path: "walletAdapter",
-            element: <Airdrop />,
+            path: "tutorial",
+            element: <Tutorial />,
+            children: [
+                {
+                    path: "baseTransfer",
+                    element: <BaseTransfer />,
+                },
+                {
+                    path: "walletAdapter",
+                    element: <Airdrop />,
+                },
+            ],
         },
         {
             path: "typography",

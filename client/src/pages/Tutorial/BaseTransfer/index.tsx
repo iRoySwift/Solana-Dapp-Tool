@@ -108,7 +108,7 @@ const BaseTransfer: React.FC<Props> = () => {
                 marginTop={10}>
                 <Item>
                     <Typography variant="h2">
-                        Please connect to your wallet for airdrop
+                        Please generate your wallet for airdrop
                     </Typography>
                 </Item>
                 {!pubkey ? (
