@@ -28,46 +28,35 @@ const Item = styled(Box)(({ theme }) => ({
 
 interface Props {}
 const BaseTransfer: React.FC<Props> = () => {
-    const [pubkey, setPubkey] = useState<String>();
+    const [pubkey, setPubkey] = useState<PublicKey>();
     const [balance, setBalance] = useState(0);
     const [toPubkey, setToPubkey] = useState(
         "HQ9Jn1KNwKyPkDyBmQtXtMWn1DXP52jRGzahx3U2Wfky"
     );
     const [count, SetCount] = useState(0);
     const connection = new Connection("https://api.devnet.solana.com");
-    const [open, setOpen] = React.useState(false);
 
-    const singer = useRef<Keypair>();
-
-    const handleClose = (
-        event?: React.SyntheticEvent | Event,
-        reason?: string
-    ) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setOpen(false);
-    };
+    const signer = useRef<Keypair>();
 
     const handleGenerateWallet = async () => {
-        singer.current = await initializeKeypair();
+        signer.current = await initializeKeypair();
         enqueueSnackbar(
-            `import account: ${singer.current.publicKey.toString()}`,
+            `import account: ${signer.current.publicKey.toString()}`,
             {
                 variant: "success",
             }
         );
-        setPubkey(singer.current.publicKey.toBase58());
+        setPubkey(signer.current.publicKey);
     };
 
     const handleQueryWallet = async () => {
-        if (!singer.current) {
+        if (!pubkey) {
             enqueueSnackbar(`Please connect to your wallet`, {
                 variant: "warning",
             });
             return;
         }
-        connection.getBalance(singer.current?.publicKey).then(balance => {
+        connection.getBalance(pubkey).then(balance => {
             enqueueSnackbar(
                 `${pubkey} has a balance of ${balance / LAMPORTS_PER_SOL}`,
                 {
@@ -85,7 +74,7 @@ const BaseTransfer: React.FC<Props> = () => {
         SetCount(v.target.value);
     };
     const handleTransfer = async () => {
-        if (!singer.current) {
+        if (!signer.current) {
             enqueueSnackbar(`Please connect to your wallet`, {
                 variant: "warning",
             });
@@ -101,14 +90,14 @@ const BaseTransfer: React.FC<Props> = () => {
         // let minRent = await connection.getMinimumBalanceForRentExemption(0);
         const instructions = [
             SystemProgram.transfer({
-                fromPubkey: singer.current.publicKey,
+                fromPubkey: signer.current.publicKey,
                 toPubkey: newtoPubkey,
                 lamports: count * LAMPORTS_PER_SOL,
             }),
         ];
 
         // Step 2 - Generate a transaction and send it to the network
-        createAndSendV0Tx(singer.current, connection, instructions);
+        createAndSendV0Tx(signer.current, connection, instructions);
     };
     return (
         <>
@@ -137,7 +126,7 @@ const BaseTransfer: React.FC<Props> = () => {
                         <Link
                             target="_blank"
                             href={`https://explorer.solana.com/address/${pubkey}?cluster=devnet`}>
-                            {pubkey}
+                            {`${pubkey}`}
                         </Link>
                     </Box>
                 )}
@@ -183,16 +172,6 @@ const BaseTransfer: React.FC<Props> = () => {
                     </Button>
                 </Stack>
             </Stack>
-            {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert
-                    onClose={handleClose}
-                    severity="success"
-                    sx={{ width: "100%" }}>
-                    {`${publicKey} has a balance of ${
-                        balance / LAMPORTS_PER_SOL
-                    }`}
-                </Alert>
-            </Snackbar> */}
         </>
     );
 };

@@ -12,7 +12,7 @@ import { enqueueSnackbar } from "notistack";
 
 // * 版本化交易
 async function createAndSendV0Tx(
-    singer: Keypair,
+    signer: Keypair,
     connection: Connection,
     txInstructions: TransactionInstruction[],
     lookupTableAccount?: AddressLookupTableAccount
@@ -28,13 +28,13 @@ async function createAndSendV0Tx(
     let messageV0;
     if (lookupTableAccount) {
         messageV0 = new TransactionMessage({
-            payerKey: singer.publicKey,
+            payerKey: signer.publicKey,
             recentBlockhash: latestBlockhash.blockhash,
             instructions: txInstructions,
         }).compileToV0Message([lookupTableAccount]);
     } else {
         messageV0 = new TransactionMessage({
-            payerKey: singer.publicKey,
+            payerKey: signer.publicKey,
             recentBlockhash: latestBlockhash.blockhash,
             instructions: txInstructions,
         }).compileToV0Message();
@@ -43,7 +43,7 @@ async function createAndSendV0Tx(
     const transaction = new VersionedTransaction(messageV0);
 
     // Step 3 - Sign your transaction with the required `Signers`
-    transaction.sign([singer]);
+    transaction.sign([signer]);
     enqueueSnackbar("   ✅ - Transaction Signed");
 
     // Step 4 - Send our v0 transaction to the cluster

@@ -10,6 +10,9 @@ import Translate from "./Translate";
 import LayoutSetting from "./LayoutSetting";
 import Search from "../Search";
 import Wallet from "./Wallets";
+// import { WalletMultiButton } from "@solana/wallet-adapter-material-ui";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 interface Props {}
 const HeaderContent: React.FC<Props> = () => {
@@ -35,7 +38,7 @@ const HeaderContent: React.FC<Props> = () => {
             {/* <LayoutSetting />
             {!matchesXs && <Profile />}
             {matchesXs && <MobileSection />} */}
-            <Wallet />
+            <WalletMultiButton style={{ width: 200 }} />
         </>
     );
 };
