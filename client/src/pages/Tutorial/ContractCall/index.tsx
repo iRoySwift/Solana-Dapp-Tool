@@ -14,10 +14,8 @@ import {
     PublicKey,
     TransactionMessage,
     VersionedTransaction,
-    type Signer,
     TransactionInstruction,
 } from "@solana/web3.js";
-import { createAssociatedTokenAccount } from "@solana/spl-token";
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
@@ -28,15 +26,20 @@ const Item = styled(Box)(({ theme }) => ({
     // color: theme.palette.text.secondary,
 }));
 
-// to 钱包地址
-const TO_PUBLIC_KEY = new PublicKey(
-    "6w9P6s2HFHRXRfCSxkatUznwq2cnHxvi52pxZJAJb1Wx"
-);
 const TOKEN_PROGRAM_ID = new PublicKey(
     "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
 );
+// token mint
 const Token_Mint = new PublicKey(
     "CQ68EPr2bHQ29bLZdHioLx5An35hfav1mqn36hG74ofH"
+);
+// to 钱包地址
+const TO_PUBLIC_KEY = new PublicKey(
+    "Gir7LUMrsXHv5gGctKNp6th2Pj7j9qmYR1LSrsHS6Yaj"
+);
+// to token ATA账号
+const TO_ATA_PUBLIC_KEY = new PublicKey(
+    "43ejD3shF5R5WrSE7mDVyB5wK7qKY2bKK3K2LVsXaXtU"
 );
 
 /**
@@ -56,13 +59,12 @@ const createTransferInstruction = (
     destination: PublicKey,
     owner: PublicKey,
     amount: number | bigint,
-    // multiSigners: (Signer | PublicKey)[] = [],
     programId = TOKEN_PROGRAM_ID
 ) => {
     const keys = [
-        { pubkey: source, isSigner: true, isWritable: true },
+        { pubkey: source, isSigner: false, isWritable: true },
         { pubkey: destination, isSigner: false, isWritable: true },
-        { pubkey: owner, isSigner: true, isWritable: true },
+        { pubkey: owner, isSigner: true, isWritable: false },
     ];
     const data = Buffer.alloc(9);
     data.writeUInt8(3);
@@ -77,8 +79,9 @@ const ContractCall: React.FC<Props> = () => {
     const { publicKey: pubkey, sendTransaction } = useWallet();
     const [balance, setBalance] = useState(0);
     const [ataPubkey, setAtaPubkey] = useState<PublicKey>();
-    const [ataBalance, setAtaBalance] = useState(0);
-    const [toAtaPubkey, setToAtaPubkey] = useState<PublicKey>();
+    const [ataBalance, setAtaBalance] = useState<number>(0);
+    const [toAtaPubkey, setToAtaPubkey] =
+        useState<PublicKey>(TO_ATA_PUBLIC_KEY);
     const [count, SetCount] = useState(0);
     // const connection = new Connection("https://api.devnet.solana.com");
     const { connection } = useConnection();
@@ -120,6 +123,7 @@ const ContractCall: React.FC<Props> = () => {
             enqueueSnackbar(`${pubkey} doesn't has a ATA of ${Token_Mint}`, {
                 variant: "warning",
             });
+            return;
         }
         enqueueSnackbar(`${pubkey} has a ATA of ${res.value[0].pubkey}`, {
             variant: "success",
@@ -144,6 +148,7 @@ const ContractCall: React.FC<Props> = () => {
         setToAtaPubkey(v.target.value);
     };
     const handleCountChange = v => {
+        console.log("🚀 ~ file: index.tsx:153 ~ handleCountChange ~ v:", v);
         SetCount(v.target.value);
     };
 
@@ -166,28 +171,16 @@ const ContractCall: React.FC<Props> = () => {
         enqueueSnackbar(`SystemProgram: ${SystemProgram.programId.toBase58()}`);
         console.log("   ✅ - Test v0 Transfer");
 
+        // TODO: 没有实现获取TO_PUBLIC_KEY的对应Token的ATA账号
         // Step 1 - get token Ata for toPubkey
-        const toPubkeyTokenAta = await connection.getTokenAccountsByOwner(
-            toAtaPubkey,
-            {
-                mint: Token_Mint,
-            }
-        );
-        if (!toPubkeyTokenAta.value.length) {
-        }
-        console.log(
-            "🚀 ~ file: index.tsx:169 ~ handleTransfer ~ toPubkeyTokenAta:",
-            toPubkeyTokenAta
-        );
+        // const toPubkeyTokenAta = await getAssociatedTokenAddress(
+        //     Token_Mint,
+        //     TO_PUBLIC_KEY
+        // );
 
         // Step 2 - create an array with your desires `instructions`
         // let minRent = await connection.getMinimumBalanceForRentExemption(0);
         const txInstructions = [
-            // SystemProgram.transfer({
-            //     fromPubkey: pubkey,
-            //     toPubkey: newtoPubkey,
-            //     lamports: count * LAMPORTS_PER_SOL,
-            // }),
             createTransferInstruction(
                 ataPubkey,
                 toAtaPubkey,
@@ -198,7 +191,7 @@ const ContractCall: React.FC<Props> = () => {
         ];
 
         // Step 3 - Fetch Latest Blockhash slot
-        let {
+        const {
             context: { slot: minContextSlot },
             value: { blockhash, lastValidBlockHeight },
         } = await connection.getLatestBlockhashAndContext();
@@ -259,14 +252,12 @@ const ContractCall: React.FC<Props> = () => {
                 <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="h5">Balance:</Typography>
                     <span>{balance / LAMPORTS_PER_SOL}</span>
-                    {!balance && (
-                        <Button
-                            variant="contained"
-                            size="small"
-                            onClick={handleQueryWallet}>
-                            Query
-                        </Button>
-                    )}
+                    <Button
+                        variant="contained"
+                        size="small"
+                        onClick={handleQueryWallet}>
+                        Query
+                    </Button>
                 </Stack>
 
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -303,14 +294,12 @@ const ContractCall: React.FC<Props> = () => {
                 <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="h5">ATA Balance:</Typography>
                     <span>{ataBalance}</span>
-                    {!ataBalance && (
-                        <Button
-                            variant="contained"
-                            size="small"
-                            onClick={handleQueryTokenBalance}>
-                            Query
-                        </Button>
-                    )}
+                    <Button
+                        variant="contained"
+                        size="small"
+                        onClick={handleQueryTokenBalance}>
+                        Query
+                    </Button>
                 </Stack>
 
                 <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -323,27 +312,12 @@ const ContractCall: React.FC<Props> = () => {
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography variant="h5">
-                        To Token ATA Public Key:
-                    </Typography>
+                    <Typography variant="h5">To ATA Public Key:</Typography>
                     <Link
                         target="_blank"
-                        href={`https://explorer.solana.com/address/${toAtaPubkey}?cluster=devnet`}>
-                        {`${toAtaPubkey || ""}`}
+                        href={`https://explorer.solana.com/address/${TO_ATA_PUBLIC_KEY}?cluster=devnet`}>
+                        {`${TO_ATA_PUBLIC_KEY || ""}`}
                     </Link>
-                    {!toAtaPubkey && (
-                        <Button
-                            variant="contained"
-                            size="small"
-                            onClick={async () => {
-                                const newAtaPubkey = await handleQueryTokenAta(
-                                    TO_PUBLIC_KEY
-                                );
-                                setAtaPubkey(newAtaPubkey);
-                            }}>
-                            Query Token ATA
-                        </Button>
-                    )}
                 </Box>
 
                 <Stack direction="row" alignItems="center" spacing={2}>
@@ -363,7 +337,7 @@ const ContractCall: React.FC<Props> = () => {
                         InputProps={{
                             inputProps: {
                                 min: 0,
-                                max: balance / LAMPORTS_PER_SOL,
+                                max: ataBalance,
                             },
                         }}
                         value={count}
