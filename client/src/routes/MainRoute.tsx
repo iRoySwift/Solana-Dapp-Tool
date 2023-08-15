@@ -19,6 +19,9 @@ const BaseTransfer = Loadable(
     lazy(() => import("@/pages/Tutorial/BaseTransfer"))
 );
 const Airdrop = Loadable(lazy(() => import("@/pages/Tutorial/WalletAdapter")));
+const ContractCall = Loadable(
+    lazy(() => import("@/pages/Tutorial/ContractCall"))
+);
 
 const MainRoute: RouteObject = {
     path: "/",
@@ -40,6 +43,10 @@ const MainRoute: RouteObject = {
                 {
                     path: "walletAdapter",
                     element: <Airdrop />,
+                },
+                {
+                    path: "contractCall",
+                    element: <ContractCall />,
                 },
             ],
         },

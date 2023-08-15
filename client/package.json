@@ -11,6 +11,7 @@
         "@mui/material": "^5.10.13",
         "@mui/x-data-grid": "^5.17.12",
         "@reduxjs/toolkit": "^1.9.2",
+        "@solana/spl-token": "^0.3.8",
         "@solana/wallet-adapter-base": "^0.9.23",
         "@solana/wallet-adapter-material-ui": "^0.16.32",
         "@solana/wallet-adapter-phantom": "^0.9.24",

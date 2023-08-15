@@ -19,9 +19,9 @@ async function createAndSendV0Tx(
 ): Promise<VersionedTransaction> {
     // Step 1 - Fetch Latest Blockhash
     let latestBlockhash = await connection.getLatestBlockhash("finalized");
-    enqueueSnackbar(
-        `   ✅ - Fetched latest blockhash. Last valid height:,
-        ${latestBlockhash.lastValidBlockHeight}`
+    console.log(
+        "   ✅ - Fetched latest blockhash. Last valid height:",
+        latestBlockhash.blockhash
     );
 
     // Step 2 - Generate Transaction Message
@@ -39,18 +39,18 @@ async function createAndSendV0Tx(
             instructions: txInstructions,
         }).compileToV0Message();
     }
-    enqueueSnackbar("   ✅ - Compiled transaction message");
+    console.log("   ✅ - Compiled transaction message");
     const transaction = new VersionedTransaction(messageV0);
 
     // Step 3 - Sign your transaction with the required `Signers`
     transaction.sign([signer]);
-    enqueueSnackbar("   ✅ - Transaction Signed");
+    console.log("   ✅ - Transaction Signed");
 
     // Step 4 - Send our v0 transaction to the cluster
     const txid = await connection.sendTransaction(transaction, {
         maxRetries: 5,
     });
-    enqueueSnackbar("   ✅ - Transaction sent to network");
+    console.log("   ✅ - Transaction sent to network");
 
     // Step 5 - Confirm Transaction
     const confirmation = await connection.confirmTransaction({

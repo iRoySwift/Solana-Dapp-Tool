@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import { enqueueSnackbar } from "notistack";
 import {
     Box,
     Button,
@@ -14,8 +16,6 @@ import {
     TransactionMessage,
     VersionedTransaction,
 } from "@solana/web3.js";
-import React, { useState } from "react";
-import { enqueueSnackbar } from "notistack";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 const Item = styled(Box)(({ theme }) => ({
@@ -30,11 +30,11 @@ const TO_PUBLIC_KEY = "HQ9Jn1KNwKyPkDyBmQtXtMWn1DXP52jRGzahx3U2Wfky";
 interface Props {}
 const WalletAdapter: React.FC<Props> = () => {
     const { publicKey: pubkey, sendTransaction } = useWallet();
+    const { connection } = useConnection();
     const [balance, setBalance] = useState(0);
     const [toPubkey, setToPubkey] = useState(TO_PUBLIC_KEY);
     const [count, SetCount] = useState(0);
     // const connection = new Connection("https://api.devnet.solana.com");
-    const { connection } = useConnection();
 
     const handleQueryWallet = async () => {
         if (!pubkey) {
@@ -87,7 +87,7 @@ const WalletAdapter: React.FC<Props> = () => {
         ];
 
         // Step 3 - Fetch Latest Blockhash slot
-        let {
+        const {
             context: { slot: minContextSlot },
             value: { blockhash, lastValidBlockHeight },
         } = await connection.getLatestBlockhashAndContext();

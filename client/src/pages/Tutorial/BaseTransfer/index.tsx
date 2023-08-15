@@ -34,7 +34,9 @@ const BaseTransfer: React.FC<Props> = () => {
         "HQ9Jn1KNwKyPkDyBmQtXtMWn1DXP52jRGzahx3U2Wfky"
     );
     const [count, SetCount] = useState(0);
-    const connection = new Connection("https://api.devnet.solana.com");
+
+    let url = "https://api.devnet.solana.com";
+    const connection = new Connection(url);
 
     const signer = useRef<Keypair>();
 
@@ -106,6 +108,7 @@ const BaseTransfer: React.FC<Props> = () => {
                 spacing={5}
                 alignItems="center"
                 marginTop={10}>
+                <Typography variant="h1">Solana的Web3.js</Typography>
                 <Item>
                     <Typography variant="h2">
                         Please generate your wallet for airdrop
@@ -130,7 +133,6 @@ const BaseTransfer: React.FC<Props> = () => {
                         </Link>
                     </Box>
                 )}
-
                 <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="h5">Balance:</Typography>
                     <span>{balance / LAMPORTS_PER_SOL}</span>

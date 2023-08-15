@@ -30,6 +30,14 @@ const tutorial = {
             icon: icons.Window,
             breadcrumbs: false,
         },
+        {
+            id: "contractCall",
+            title: "Contract Call",
+            type: "item",
+            url: "/tutorial/contractCall",
+            icon: icons.Window,
+            breadcrumbs: false,
+        },
     ],
 };
 

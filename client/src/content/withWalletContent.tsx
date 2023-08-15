@@ -24,9 +24,9 @@ const withWalletContent =
         return (
             <ConnectionProvider endpoint={endpoint}>
                 <WalletProvider wallets={wallets} autoConnect>
-                    <WalletModalProviderStyled>
+                    <WalletModalProvider>
                         <Component {...props} />
-                    </WalletModalProviderStyled>
+                    </WalletModalProvider>
                 </WalletProvider>
             </ConnectionProvider>
         );
