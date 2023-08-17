@@ -58,8 +58,59 @@ interface Props {
     connection: Connection;
 }
 const MintToken: React.FC<Props> = ({ signer, connection }) => {
+    const [balance, setBalance] = useState(0);
     const [tokenList, setTokenList] = useState<itokenItem[]>([]);
     const [loading, setLoading] = useState(false);
+
+    const handleQueryWallet = async () => {
+        if (!signer.publicKey) {
+            enqueueSnackbar(`Please connect to your wallet`, {
+                variant: "warning",
+            });
+            return;
+        }
+        connection.getBalance(signer.publicKey).then(balance => {
+            enqueueSnackbar(
+                `${signer.publicKey} has a balance of ${
+                    balance / LAMPORTS_PER_SOL
+                }`,
+                {
+                    variant: "success",
+                }
+            );
+            setBalance(balance);
+        });
+    };
+
+    // Airdrop
+    const handleAirdrop = async () => {
+        const signature = await connection.requestAirdrop(
+            signer.publicKey,
+            LAMPORTS_PER_SOL
+        );
+        const {
+            context: { slot: minContextSlot },
+            value: { blockhash, lastValidBlockHeight },
+        } = await connection.getLatestBlockhashAndContext();
+        const confirmation = await connection.confirmTransaction({
+            signature,
+            blockhash,
+            lastValidBlockHeight,
+        });
+        if (confirmation.value.err) {
+            throw new Error("   ❌ - 4. Transaction not confirmed.");
+        }
+
+        enqueueSnackbar("🎉 Transaction succesfully confirmed!", {
+            variant: "success",
+        });
+        enqueueSnackbar(
+            `https://explorer.solana.com/tx/${signature}?cluster=devnet`,
+            {
+                variant: "success",
+            }
+        );
+    };
 
     // 创建Token和ATA
     const createToken = async () => {
@@ -171,6 +222,25 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
                         {`${signer.publicKey}`}
                     </Link>
                 </Item>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                    <Typography variant="h5">Balance:</Typography>
+                    <span>{balance / LAMPORTS_PER_SOL}</span>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleQueryWallet}>
+                        Query
+                    </Button>
+                </Stack>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                    <Typography variant="h5">Airdrop:</Typography>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleAirdrop}>
+                        Airdrop
+                    </Button>
+                </Stack>
                 <Item>
                     <Typography variant="h5">Mint Address:</Typography>
                     <Button

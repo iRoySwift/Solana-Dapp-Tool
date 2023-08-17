@@ -140,8 +140,8 @@ async function createAndSendV0TxByWallet(
     // * Step 4 - Confirm Transaction
     const confirmation = await connection.confirmTransaction({
         signature: txid,
-        blockhash: blockhash,
-        lastValidBlockHeight: lastValidBlockHeight,
+        blockhash,
+        lastValidBlockHeight,
     });
     if (confirmation.value.err) {
         throw new Error("   ❌ - 4. Transaction not confirmed.");
