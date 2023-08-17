@@ -4,15 +4,13 @@ import {
     ConnectionProvider,
     WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { WalletDialogProvider } from "@solana/wallet-adapter-material-ui";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
 import React from "react";
-import { styled } from "@mui/material";
 
-const WalletModalProviderStyled = styled(WalletModalProvider)(() => ({
-    zIndex: 2000,
-}));
+// const WalletModalProviderStyled = styled(WalletModalProvider)(() => ({
+//     zIndex: 2000,
+// }));
 
 interface Props {}
 const withWalletContent =

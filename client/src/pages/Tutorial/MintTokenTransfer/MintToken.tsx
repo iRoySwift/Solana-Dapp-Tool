@@ -89,7 +89,6 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
             LAMPORTS_PER_SOL
         );
         const {
-            context: { slot: minContextSlot },
             value: { blockhash, lastValidBlockHeight },
         } = await connection.getLatestBlockhashAndContext();
         const confirmation = await connection.confirmTransaction({

@@ -1,5 +1,5 @@
 // material-ui
-import { Typography, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 
 /**
  * if you want to use image instead of <svg> uncomment following.

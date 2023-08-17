@@ -61,6 +61,7 @@ const withLayoutContent =
         const [state, dispatch] = useReducer(reducer, initialState);
         useEffect(() => {
             initAppLanguage(state, dispatch);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
         return (
             <LayoutContent.Provider value={{ state, dispatch }}>
