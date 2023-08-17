@@ -24,7 +24,7 @@ jobs:
         defaults:
             run:
                 shell: bash
-                working-directory: client
+                working-directory: ${{ github.workspace }}/client
 
         # Steps represent a sequence of tasks that will be executed as part of the job
         steps:
@@ -38,6 +38,8 @@ jobs:
               run: yarn install --frozen-lockfile
             - name: Build website
               run: yarn build
+            - name: List Path
+              run: ls -la
 
             # Popular action to deploy to GitHub Pages:
             # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
