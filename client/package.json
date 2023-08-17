@@ -1,7 +1,7 @@
 {
     "name": "solana_tools_client",
     "version": "1.0.0",
-    "private": true,
+    "private": false,
     "homepage": ".",
     "description": "Template for Create React App supporting TypeScript with Prettier and ESlint config recommended by react-app.",
     "dependencies": {
