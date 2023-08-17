@@ -39,7 +39,7 @@ jobs:
             - name: Build website
               run: yarn build
             - name: List Path
-              run: ls -la
+              run: ls -la dist
             - name: Current Path
               run: pwd
 
