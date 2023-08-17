@@ -22,7 +22,7 @@ const HeaderContent: React.FC<Props> = () => {
             {matchesXs && <Box sx={{ width: "100%" }} />}
             <IconButton
                 component={Link}
-                href="https://github.com/iRoySwift/cra-template-framework"
+                href="https://github.com/iRoySwift/solana_tools"
                 target="_blank"
                 disableRipple
                 color="secondary"

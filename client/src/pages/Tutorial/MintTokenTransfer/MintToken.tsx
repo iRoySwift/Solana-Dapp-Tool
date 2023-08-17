@@ -19,6 +19,8 @@ import {
     TOKEN_PROGRAM_ID,
     createAssociatedTokenAccount,
     createMint,
+    getAssociatedTokenAddress,
+    getMint,
     mintTo,
 } from "@solana/spl-token";
 import {
@@ -141,7 +143,7 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
     };
 
     // Mint Token
-    const MintToken = async (
+    const handleMintToken = async (
         mint: PublicKey,
         ata: PublicKey,
         mintNumber: number
@@ -178,19 +180,27 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
                 programId: TOKEN_PROGRAM_ID,
             }
         );
-        result.value.forEach(item => {
+        result.value.forEach(async item => {
             // 处理Unit8Array数据
             const dataUnit8Array = item.account.data;
             // 将Unit8Array转换为JSON
             const accountInfo = AccountLayout.decode(dataUnit8Array);
-            arr.push(
-                createData(
-                    accountInfo.mint,
-                    item.pubkey,
-                    Number(accountInfo.amount / BigInt(LAMPORTS_PER_SOL)),
-                    1
-                )
-            );
+
+            // 筛选拥有铸币权限的token
+            const mintInfo = await getMint(connection, accountInfo.mint);
+            if (
+                mintInfo.mintAuthority?.toBase58() ===
+                signer.publicKey.toBase58()
+            ) {
+                arr.push(
+                    createData(
+                        accountInfo.mint,
+                        item.pubkey,
+                        Number(accountInfo.amount / BigInt(LAMPORTS_PER_SOL)),
+                        1
+                    )
+                );
+            }
         });
         setTimeout(() => {
             setTokenList(arr);
@@ -231,17 +241,16 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
                         Query
                     </Button>
                 </Stack>
-                <Stack direction="row" alignItems="center" spacing={2}>
+                {/* <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="h5">Airdrop:</Typography>
+                </Stack> */}
+                <Item>
                     <Button
                         variant="outlined"
                         size="small"
                         onClick={handleAirdrop}>
                         Airdrop
                     </Button>
-                </Stack>
-                <Item>
-                    <Typography variant="h5">Mint Address:</Typography>
                     <Button
                         variant="outlined"
                         size="small"
@@ -312,7 +321,7 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
                                     <TableCell align="right">
                                         <Button
                                             onClick={() =>
-                                                MintToken(
+                                                handleMintToken(
                                                     row.mintAddress,
                                                     row.ata,
                                                     row.mintNumber
