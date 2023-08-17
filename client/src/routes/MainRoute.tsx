@@ -22,6 +22,9 @@ const Airdrop = Loadable(lazy(() => import("@/pages/Tutorial/WalletAdapter")));
 const ContractCall = Loadable(
     lazy(() => import("@/pages/Tutorial/ContractCall"))
 );
+const MintTokenTransfer = Loadable(
+    lazy(() => import("@/pages/Tutorial/MintTokenTransfer"))
+);
 
 const MainRoute: RouteObject = {
     path: "/",
@@ -47,6 +50,10 @@ const MainRoute: RouteObject = {
                 {
                     path: "contractCall",
                     element: <ContractCall />,
+                },
+                {
+                    path: "mintTokenTransfer",
+                    element: <MintTokenTransfer />,
                 },
             ],
         },

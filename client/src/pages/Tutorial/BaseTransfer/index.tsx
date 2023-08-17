@@ -1,4 +1,3 @@
-import initializeKeypair from "@/utils/solana/initializeKeypair";
 import {
     Box,
     Button,
@@ -10,14 +9,16 @@ import {
 } from "@mui/material";
 import {
     Connection,
-    Keypair,
     LAMPORTS_PER_SOL,
     PublicKey,
     SystemProgram,
+    Keypair,
+    clusterApiUrl,
 } from "@solana/web3.js";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { createAndSendV0Tx } from "@/utils/solana/sendTransaction";
+import Loading from "@/components/Loading";
 
 const Item = styled(Box)(({ theme }) => ({
     // backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -26,41 +27,42 @@ const Item = styled(Box)(({ theme }) => ({
     // color: theme.palette.text.secondary,
 }));
 
+// keypair
+const secretKeyArray = JSON.parse(
+    process.env.REACT_APP_PRIVATE_KEY || "[]"
+) as number[];
+
+// to 钱包地址
+const TO_PUBLIC_KEY = new PublicKey(
+    "Gir7LUMrsXHv5gGctKNp6th2Pj7j9qmYR1LSrsHS6Yaj"
+);
+
 interface Props {}
 const BaseTransfer: React.FC<Props> = () => {
-    const [pubkey, setPubkey] = useState<PublicKey>();
     const [balance, setBalance] = useState(0);
-    const [toPubkey, setToPubkey] = useState(
-        "HQ9Jn1KNwKyPkDyBmQtXtMWn1DXP52jRGzahx3U2Wfky"
-    );
+    const [toPubkey, setToPubkey] = useState(TO_PUBLIC_KEY);
     const [count, SetCount] = useState(0);
+    const [loading, setLoading] = useState(false);
 
-    let url = "https://api.devnet.solana.com";
-    const connection = new Connection(url);
+    // Step 1 连接到Solana网络 devnet
+    const devnet = clusterApiUrl("devnet");
+    const connection = new Connection(devnet, "confirmed");
 
-    const signer = useRef<Keypair>();
-
-    const handleGenerateWallet = async () => {
-        signer.current = await initializeKeypair();
-        enqueueSnackbar(
-            `import account: ${signer.current.publicKey.toString()}`,
-            {
-                variant: "success",
-            }
-        );
-        setPubkey(signer.current.publicKey);
-    };
+    // Step 2 创建者账号信息（private key）
+    const signer = Keypair.fromSecretKey(new Uint8Array(secretKeyArray));
 
     const handleQueryWallet = async () => {
-        if (!pubkey) {
+        if (!signer.publicKey) {
             enqueueSnackbar(`Please connect to your wallet`, {
                 variant: "warning",
             });
             return;
         }
-        connection.getBalance(pubkey).then(balance => {
+        connection.getBalance(signer.publicKey).then(balance => {
             enqueueSnackbar(
-                `${pubkey} has a balance of ${balance / LAMPORTS_PER_SOL}`,
+                `${signer.publicKey} has a balance of ${
+                    balance / LAMPORTS_PER_SOL
+                }`,
                 {
                     variant: "success",
                 }
@@ -70,36 +72,51 @@ const BaseTransfer: React.FC<Props> = () => {
     };
 
     const handleReciveChange = v => {
-        setToPubkey(v.target.value);
+        setToPubkey(new PublicKey(v.target.value));
     };
     const handleCountChange = v => {
         SetCount(v.target.value);
     };
     const handleTransfer = async () => {
-        if (!signer.current) {
+        if (!signer) {
             enqueueSnackbar(`Please connect to your wallet`, {
                 variant: "warning",
             });
             return;
         }
-        enqueueSnackbar(`transfer to ${toPubkey} ${count} SOL`, {
-            variant: "info",
-        });
+        setLoading(true);
         console.log("   ✅ - Test v0 Transfer");
-        // Step 1 - new destination address
-        const newtoPubkey = new PublicKey(toPubkey);
-        // create an array with your desires `instructions`
+
+        // * Step 1 - create an array with your desires `instructions`
         // let minRent = await connection.getMinimumBalanceForRentExemption(0);
         const instructions = [
             SystemProgram.transfer({
-                fromPubkey: signer.current.publicKey,
-                toPubkey: newtoPubkey,
+                fromPubkey: signer.publicKey,
+                toPubkey,
                 lamports: count * LAMPORTS_PER_SOL,
             }),
         ];
+        console.log(
+            "   ✅ - Step 1 - create an array with your desires `instructions`"
+        );
 
-        // Step 2 - Generate a transaction and send it to the network
-        createAndSendV0Tx(signer.current, connection, instructions);
+        // * Step 2 - Generate a transaction and send it to the network
+        const txid = await createAndSendV0Tx(signer, connection, instructions);
+        console.log(
+            "   ✅ - Step 2 - Generate a transaction and send it to the network"
+        );
+
+        setLoading(false);
+
+        enqueueSnackbar("🎉 Transaction succesfully confirmed!", {
+            variant: "success",
+        });
+        enqueueSnackbar(
+            `https://explorer.solana.com/tx/${txid}?cluster=devnet`,
+            {
+                variant: "success",
+            }
+        );
     };
     return (
         <>
@@ -110,29 +127,16 @@ const BaseTransfer: React.FC<Props> = () => {
                 marginTop={10}>
                 <Typography variant="h1">Solana的Web3.js</Typography>
                 <Item>
-                    <Typography variant="h2">
-                        Please generate your wallet for airdrop
-                    </Typography>
+                    <Typography variant="h2">Transfer SOL</Typography>
                 </Item>
-                {!pubkey ? (
-                    <Item>
-                        <Button
-                            variant="contained"
-                            size="large"
-                            onClick={handleGenerateWallet}>
-                            Generate wallet
-                        </Button>
-                    </Item>
-                ) : (
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Typography variant="h5">PublicKey:</Typography>
-                        <Link
-                            target="_blank"
-                            href={`https://explorer.solana.com/address/${pubkey}?cluster=devnet`}>
-                            {`${pubkey}`}
-                        </Link>
-                    </Box>
-                )}
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography variant="h5">PublicKey:</Typography>
+                    <Link
+                        target="_blank"
+                        href={`https://explorer.solana.com/address/${signer.publicKey}?cluster=devnet`}>
+                        {`${signer.publicKey}`}
+                    </Link>
+                </Box>
                 <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="h5">Balance:</Typography>
                     <span>{balance / LAMPORTS_PER_SOL}</span>
@@ -173,6 +177,7 @@ const BaseTransfer: React.FC<Props> = () => {
                         Transfer
                     </Button>
                 </Stack>
+                {loading && <Loading />}
             </Stack>
         </>
     );

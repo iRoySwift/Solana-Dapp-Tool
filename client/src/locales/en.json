@@ -4,18 +4,19 @@
             "navigation": "Navigation",
             "dashboard": "Dashboard",
             "authentication": "Authentication",
-            "airdrop": "Airdrop",
-            "tutorial": "Tutorial",
-            "baseTransfer": "BaseTransfer",
-            "walletAdapter": "Wallet Adapter",
-            "contractCall": "Contract Call",
             "login": "Login",
             "register": "Register",
             "utilities": "Utilities",
             "typography": "Typography",
             "color": "Color",
             "shadow": "Shadow",
-            "muiIcon": "Mui Icons"
+            "muiIcon": "Mui Icons",
+            "airdrop": "Airdrop",
+            "tutorial": "Tutorial",
+            "baseTransfer": "Base Transfer",
+            "walletAdapter": "Wallet Adapter",
+            "contractCall": "Contract Call",
+            "mintTokenTransfer": "Mint Token Transfer"
         },
         "greeting": {
             "hello": "Hello"

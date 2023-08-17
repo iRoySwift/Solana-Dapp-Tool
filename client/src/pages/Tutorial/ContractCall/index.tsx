@@ -1,3 +1,5 @@
+import Loading from "@/components/Loading";
+import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
 import {
     Stack,
     Typography,
@@ -7,13 +9,11 @@ import {
     Box,
     Link,
 } from "@mui/material";
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import {
     LAMPORTS_PER_SOL,
-    SystemProgram,
     PublicKey,
-    TransactionMessage,
-    VersionedTransaction,
     TransactionInstruction,
 } from "@solana/web3.js";
 import { enqueueSnackbar } from "notistack";
@@ -26,9 +26,6 @@ const Item = styled(Box)(({ theme }) => ({
     // color: theme.palette.text.secondary,
 }));
 
-const TOKEN_PROGRAM_ID = new PublicKey(
-    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-);
 // token mint
 const Token_Mint = new PublicKey(
     "CQ68EPr2bHQ29bLZdHioLx5An35hfav1mqn36hG74ofH"
@@ -36,10 +33,6 @@ const Token_Mint = new PublicKey(
 // to 钱包地址
 const TO_PUBLIC_KEY = new PublicKey(
     "Gir7LUMrsXHv5gGctKNp6th2Pj7j9qmYR1LSrsHS6Yaj"
-);
-// to token ATA账号
-const TO_ATA_PUBLIC_KEY = new PublicKey(
-    "43ejD3shF5R5WrSE7mDVyB5wK7qKY2bKK3K2LVsXaXtU"
 );
 
 /**
@@ -80,11 +73,10 @@ const ContractCall: React.FC<Props> = () => {
     const [balance, setBalance] = useState(0);
     const [ataPubkey, setAtaPubkey] = useState<PublicKey>();
     const [ataBalance, setAtaBalance] = useState<number>(0);
-    const [toAtaPubkey, setToAtaPubkey] =
-        useState<PublicKey>(TO_ATA_PUBLIC_KEY);
+    const [toAtaPubkey, setToAtaPubkey] = useState<PublicKey>();
     const [count, SetCount] = useState(0);
-    // const connection = new Connection("https://api.devnet.solana.com");
     const { connection } = useConnection();
+    const [loading, setLoading] = useState(false);
 
     const handleQueryWallet = async () => {
         if (!pubkey) {
@@ -148,7 +140,6 @@ const ContractCall: React.FC<Props> = () => {
         setToAtaPubkey(v.target.value);
     };
     const handleCountChange = v => {
-        console.log("🚀 ~ file: index.tsx:153 ~ handleCountChange ~ v:", v);
         SetCount(v.target.value);
     };
 
@@ -165,20 +156,9 @@ const ContractCall: React.FC<Props> = () => {
             });
             return;
         }
-        enqueueSnackbar(`transfer to ${toAtaPubkey} ${count} Token`, {
-            variant: "info",
-        });
-        enqueueSnackbar(`SystemProgram: ${SystemProgram.programId.toBase58()}`);
-        console.log("   ✅ - Test v0 Transfer");
+        setLoading(true);
 
-        // TODO: 没有实现获取TO_PUBLIC_KEY的对应Token的ATA账号
-        // Step 1 - get token Ata for toPubkey
-        // const toPubkeyTokenAta = await getAssociatedTokenAddress(
-        //     Token_Mint,
-        //     TO_PUBLIC_KEY
-        // );
-
-        // Step 2 - create an array with your desires `instructions`
+        // * Step 1 - create an array with your desires `instructions`
         // let minRent = await connection.getMinimumBalanceForRentExemption(0);
         const txInstructions = [
             createTransferInstruction(
@@ -189,40 +169,22 @@ const ContractCall: React.FC<Props> = () => {
                 TOKEN_PROGRAM_ID
             ),
         ];
-
-        // Step 3 - Fetch Latest Blockhash slot
-        const {
-            context: { slot: minContextSlot },
-            value: { blockhash, lastValidBlockHeight },
-        } = await connection.getLatestBlockhashAndContext();
-        enqueueSnackbar(
-            `   ✅ - Fetched latest blockhash. Last valid height:,
-        ${lastValidBlockHeight}`
+        console.log(
+            "   ✅ - Step 1 - create an array with your desires `instructions`"
         );
 
-        // Step 4 - Generate Transaction Message
-        const messageV0 = new TransactionMessage({
-            payerKey: pubkey,
-            recentBlockhash: blockhash,
-            instructions: txInstructions,
-        }).compileToV0Message();
-        enqueueSnackbar("   ✅ - Compiled transaction message");
-        const transaction = new VersionedTransaction(messageV0);
+        // * Step 2 - Generate a transaction and send it to the network
+        const txid = await createAndSendV0TxByWallet(
+            pubkey,
+            connection,
+            sendTransaction,
+            txInstructions
+        );
+        console.log(
+            "   ✅ - Step 2 - Generate a transaction and send it to the network"
+        );
 
-        // Step 5 - Send our v0 transaction to the cluster
-        const txid = await sendTransaction(transaction, connection, {
-            minContextSlot,
-        });
-
-        // Step 5 - Confirm Transaction
-        const confirmation = await connection.confirmTransaction({
-            signature: txid,
-            blockhash,
-            lastValidBlockHeight,
-        });
-        if (confirmation.value.err) {
-            throw new Error("   ❌ - Transaction not confirmed.");
-        }
+        setLoading(false);
 
         enqueueSnackbar("🎉 Transaction succesfully confirmed!");
         enqueueSnackbar(
@@ -236,6 +198,11 @@ const ContractCall: React.FC<Props> = () => {
                 spacing={5}
                 alignItems="center"
                 marginTop={10}>
+                <Item>
+                    <Typography variant="h2">
+                        Please connect to your wallet for transfer
+                    </Typography>
+                </Item>
                 <Item>
                     <Typography variant="h2">Transfer SPL Token</Typography>
                 </Item>
@@ -315,9 +282,24 @@ const ContractCall: React.FC<Props> = () => {
                     <Typography variant="h5">To ATA Public Key:</Typography>
                     <Link
                         target="_blank"
-                        href={`https://explorer.solana.com/address/${TO_ATA_PUBLIC_KEY}?cluster=devnet`}>
-                        {`${TO_ATA_PUBLIC_KEY || ""}`}
+                        href={`https://explorer.solana.com/address/${toAtaPubkey}?cluster=devnet`}>
+                        {`${toAtaPubkey || ""}`}
                     </Link>
+                    {!toAtaPubkey && (
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={async () => {
+                                const newAtaPubkey = await handleQueryTokenAta(
+                                    TO_PUBLIC_KEY
+                                );
+                                console.log(newAtaPubkey, "newAtaPubkey");
+
+                                setToAtaPubkey(newAtaPubkey);
+                            }}>
+                            Query Token
+                        </Button>
+                    )}
                 </Box>
 
                 <Stack direction="row" alignItems="center" spacing={2}>
@@ -325,7 +307,7 @@ const ContractCall: React.FC<Props> = () => {
                         id="recived_address"
                         label="Recive Address"
                         variant="outlined"
-                        value={toAtaPubkey}
+                        value={`${toAtaPubkey || ""}`}
                         onChange={handleReciveChange}
                     />
                     <TextField
@@ -340,7 +322,7 @@ const ContractCall: React.FC<Props> = () => {
                                 max: ataBalance,
                             },
                         }}
-                        value={count}
+                        defaultValue={count}
                         onChange={handleCountChange}
                     />
                     <Button
@@ -351,6 +333,7 @@ const ContractCall: React.FC<Props> = () => {
                     </Button>
                 </Stack>
             </Stack>
+            {loading && <Loading />}
         </>
     );
 };

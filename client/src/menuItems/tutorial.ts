@@ -38,6 +38,14 @@ const tutorial = {
             icon: icons.Window,
             breadcrumbs: false,
         },
+        {
+            id: "mintTokenTransfer",
+            title: "Mint Token Transfer",
+            type: "item",
+            url: "/tutorial/mintTokenTransfer",
+            icon: icons.Window,
+            breadcrumbs: false,
+        },
     ],
 };
 

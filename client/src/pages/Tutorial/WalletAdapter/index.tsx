@@ -9,14 +9,9 @@ import {
     Typography,
     styled,
 } from "@mui/material";
-import {
-    LAMPORTS_PER_SOL,
-    PublicKey,
-    SystemProgram,
-    TransactionMessage,
-    VersionedTransaction,
-} from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
 
 const Item = styled(Box)(({ theme }) => ({
     // backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -25,7 +20,10 @@ const Item = styled(Box)(({ theme }) => ({
     // color: theme.palette.text.secondary,
 }));
 
-const TO_PUBLIC_KEY = "HQ9Jn1KNwKyPkDyBmQtXtMWn1DXP52jRGzahx3U2Wfky";
+// to 钱包地址
+const TO_PUBLIC_KEY = new PublicKey(
+    "Gir7LUMrsXHv5gGctKNp6th2Pj7j9qmYR1LSrsHS6Yaj"
+);
 
 interface Props {}
 const WalletAdapter: React.FC<Props> = () => {
@@ -34,7 +32,6 @@ const WalletAdapter: React.FC<Props> = () => {
     const [balance, setBalance] = useState(0);
     const [toPubkey, setToPubkey] = useState(TO_PUBLIC_KEY);
     const [count, SetCount] = useState(0);
-    // const connection = new Connection("https://api.devnet.solana.com");
 
     const handleQueryWallet = async () => {
         if (!pubkey) {
@@ -55,7 +52,7 @@ const WalletAdapter: React.FC<Props> = () => {
     };
 
     const handleReciveChange = v => {
-        setToPubkey(v.target.value);
+        setToPubkey(new PublicKey(v.target.value));
     };
     const handleCountChange = v => {
         SetCount(v.target.value);
@@ -67,58 +64,29 @@ const WalletAdapter: React.FC<Props> = () => {
             });
             return;
         }
-        enqueueSnackbar(`transfer to ${toPubkey} ${count} SOL`, {
-            variant: "info",
-        });
-        enqueueSnackbar(`SystemProgram: ${SystemProgram.programId.toBase58()}`);
-        console.log("   ✅ - Test v0 Transfer");
-
-        // Step 1 - new destination address
-        const newtoPubkey = new PublicKey(toPubkey);
-
-        // Step 2 - create an array with your desires `instructions`
+        // * Step 1 - create an array with your desires `instructions`
         // let minRent = await connection.getMinimumBalanceForRentExemption(0);
         const txInstructions = [
             SystemProgram.transfer({
                 fromPubkey: pubkey,
-                toPubkey: newtoPubkey,
+                toPubkey,
                 lamports: count * LAMPORTS_PER_SOL,
             }),
         ];
-
-        // Step 3 - Fetch Latest Blockhash slot
-        const {
-            context: { slot: minContextSlot },
-            value: { blockhash, lastValidBlockHeight },
-        } = await connection.getLatestBlockhashAndContext();
-        enqueueSnackbar(
-            `   ✅ - Fetched latest blockhash. Last valid height:,
-        ${lastValidBlockHeight}`
+        console.log(
+            "   ✅ - Step 1 - create an array with your desires `instructions`"
         );
 
-        // Step 4 - Generate Transaction Message
-        const messageV0 = new TransactionMessage({
-            payerKey: pubkey,
-            recentBlockhash: blockhash,
-            instructions: txInstructions,
-        }).compileToV0Message();
-        enqueueSnackbar("   ✅ - Compiled transaction message");
-        const transaction = new VersionedTransaction(messageV0);
-
-        // Step 5 - Send our v0 transaction to the cluster
-        const txid = await sendTransaction(transaction, connection, {
-            minContextSlot,
-        });
-
-        // Step 5 - Confirm Transaction
-        const confirmation = await connection.confirmTransaction({
-            signature: txid,
-            blockhash,
-            lastValidBlockHeight,
-        });
-        if (confirmation.value.err) {
-            throw new Error("   ❌ - Transaction not confirmed.");
-        }
+        // * Step 2 - Generate a transaction and send it to the network
+        const txid = await createAndSendV0TxByWallet(
+            pubkey,
+            connection,
+            sendTransaction,
+            txInstructions
+        );
+        console.log(
+            "   ✅ - Step 2 - Generate a transaction and send it to the network"
+        );
 
         enqueueSnackbar("🎉 Transaction succesfully confirmed!");
         enqueueSnackbar(
@@ -134,18 +102,22 @@ const WalletAdapter: React.FC<Props> = () => {
                 marginTop={10}>
                 <Item>
                     <Typography variant="h2">
-                        Please connect to your wallet for airdrop
+                        Please connect to your wallet for transfer
                     </Typography>
                 </Item>
 
-                <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Item>
+                    <Typography variant="h2">Transfer SOL</Typography>
+                </Item>
+
+                <Item>
                     <Typography variant="h5">PublicKey:</Typography>
                     <Link
                         target="_blank"
                         href={`https://explorer.solana.com/address/${pubkey}?cluster=devnet`}>
                         {`${pubkey}`}
                     </Link>
-                </Box>
+                </Item>
 
                 <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="h5">Balance:</Typography>
