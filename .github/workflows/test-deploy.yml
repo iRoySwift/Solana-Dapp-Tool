@@ -20,7 +20,7 @@ jobs:
         # The type of runner that the job will run on
         runs-on: ubuntu-latest
 
-        # 默认工作目录
+        # defualt run
         defaults:
             run:
                 shell: bash

@@ -20,7 +20,7 @@ jobs:
         # The type of runner that the job will run on
         runs-on: ubuntu-latest
 
-        # 默认工作目录
+        # defualt run
         defaults:
             run:
                 shell: bash
@@ -46,7 +46,7 @@ jobs:
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
                   # Build output to publish to the `gh-pages` branch:
-                  publish_dir: ./client/build
+                  publish_dir: ./client/dist
                   # The following lines assign commit authorship to the official
                   # GH-Actions bot for deploys to `gh-pages` branch:
                   # https://github.com/actions/checkout/issues/13#issuecomment-724415212
