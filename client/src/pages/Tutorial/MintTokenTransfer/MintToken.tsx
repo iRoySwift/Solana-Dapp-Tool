@@ -19,7 +19,6 @@ import {
     TOKEN_PROGRAM_ID,
     createAssociatedTokenAccount,
     createMint,
-    getAssociatedTokenAddress,
     getMint,
     mintTo,
 } from "@solana/spl-token";
