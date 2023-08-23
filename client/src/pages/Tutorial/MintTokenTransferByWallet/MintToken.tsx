@@ -355,144 +355,151 @@ const MintToken: React.FC<Props> = ({
     };
 
     return (
-        <Box sx={{ flex: 1, overflow: "auto", paddingRight: 3 }}>
-            <Typography variant="h4">Mint Token</Typography>
-            <Stack spacing={5} marginTop={5}>
-                <Item>
-                    <Typography variant="h5">Public Key:</Typography>
-                    <Link
-                        target="_blank"
-                        href={`https://explorer.solana.com/address/${pubkey}?cluster=devnet`}>
-                        {`${pubkey || ""}`}
-                    </Link>
-                </Item>
-                <Stack direction="row" alignItems="center" spacing={2}>
-                    <Typography variant="h5">Balance:</Typography>
-                    <span>{balance / LAMPORTS_PER_SOL}</span>
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={handleQueryWallet}>
-                        Query
-                    </Button>
-                </Stack>
-                {/* <Stack direction="row" alignItems="center" spacing={2}>
+        <>
+            <Box sx={{ flex: 1, overflowY: "auto", paddingRight: 3 }}>
+                <Typography variant="h4">Mint Token</Typography>
+                <Stack spacing={5} marginTop={5}>
+                    <Item>
+                        <Typography variant="h5">Public Key:</Typography>
+                        <Link
+                            target="_blank"
+                            href={`https://explorer.solana.com/address/${pubkey}?cluster=devnet`}>
+                            {`${pubkey || ""}`}
+                        </Link>
+                    </Item>
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        <Typography variant="h5">Balance:</Typography>
+                        <span>{balance / LAMPORTS_PER_SOL}</span>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={handleQueryWallet}>
+                            Query
+                        </Button>
+                    </Stack>
+                    {/* <Stack direction="row" alignItems="center" spacing={2}>
                     <Typography variant="h5">Airdrop:</Typography>
                 </Stack> */}
-                <Item>
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={handleAirdrop}>
-                        Airdrop
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={createToken}>
-                        Create Token
-                    </Button>
-                </Item>
-                <Item>
-                    <Typography variant="h5">Token List:</Typography>
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={queryTokenList}>
-                        Query
-                    </Button>
-                </Item>
-                <TableContainer
-                    sx={{ maxWidth: "100%", overflow: "auto" }}
-                    component={Paper}>
-                    <Table stickyHeader aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Mint Address</TableCell>
-                                <TableCell>ATA</TableCell>
-                                <TableCell align="right">
-                                    Balance(Number)
-                                </TableCell>
-                                <TableCell align="right">Authority</TableCell>
-                                <TableCell align="right">
-                                    Mint Number(Number)
-                                </TableCell>
-                                <TableCell align="right">Action</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tokenList.map(row => (
-                                <TableRow
-                                    key={`${row.mintAddress}`}
-                                    sx={{
-                                        "&:last-child td, &:last-child th": {
-                                            border: 0,
-                                        },
-                                    }}>
-                                    <TableCell component="th" scope="row">
-                                        {`${row.mintAddress}`}
+                    <Item>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={handleAirdrop}>
+                            Airdrop
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={createToken}>
+                            Create Token
+                        </Button>
+                    </Item>
+                    <Item>
+                        <Typography variant="h5">Token List:</Typography>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={queryTokenList}>
+                            Query
+                        </Button>
+                    </Item>
+                    <TableContainer
+                        sx={{ maxWidth: "100%", overflow: "auto" }}
+                        component={Paper}>
+                        <Table stickyHeader aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Mint Address</TableCell>
+                                    <TableCell>ATA</TableCell>
+                                    <TableCell align="right">
+                                        Balance(Number)
                                     </TableCell>
                                     <TableCell align="right">
-                                        {`${row.ata}`}
+                                        Authority
                                     </TableCell>
                                     <TableCell align="right">
-                                        {`${row.balance}`}
+                                        Mint Number(Number)
                                     </TableCell>
-                                    <TableCell align="right">
-                                        {`${row.authority}`}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {row.authority && (
-                                            <TextField
-                                                hiddenLabel
-                                                id="filled-hidden-label-small"
-                                                defaultValue={row.mintNumber}
-                                                variant="outlined"
-                                                size="small"
-                                                type="number"
-                                                onChange={v =>
-                                                    handleUpdateMintNumber(
-                                                        row.ata,
-                                                        v
-                                                    )
-                                                }
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {row.authority && (
-                                            <Button
-                                                onClick={() =>
-                                                    handleMintToken(
-                                                        row.mintAddress,
-                                                        row.ata,
-                                                        row.mintNumber
-                                                    )
-                                                }>
-                                                Mint
-                                            </Button>
-                                        )}
-                                    </TableCell>
+                                    <TableCell align="right">Action</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                    {!tokenList.length && (
-                        <Box
-                            sx={{
-                                width: "100%",
-                                padding: 2,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}>
-                            暂无数据
-                        </Box>
-                    )}
-                </TableContainer>
-            </Stack>
+                            </TableHead>
+                            <TableBody>
+                                {tokenList.map(row => (
+                                    <TableRow
+                                        key={`${row.mintAddress}`}
+                                        sx={{
+                                            "&:last-child td, &:last-child th":
+                                                {
+                                                    border: 0,
+                                                },
+                                        }}>
+                                        <TableCell component="th" scope="row">
+                                            {`${row.mintAddress}`}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {`${row.ata}`}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {`${row.balance}`}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {`${row.authority}`}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {row.authority && (
+                                                <TextField
+                                                    hiddenLabel
+                                                    id="filled-hidden-label-small"
+                                                    defaultValue={
+                                                        row.mintNumber
+                                                    }
+                                                    variant="outlined"
+                                                    size="small"
+                                                    type="number"
+                                                    onChange={v =>
+                                                        handleUpdateMintNumber(
+                                                            row.ata,
+                                                            v
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {row.authority && (
+                                                <Button
+                                                    onClick={() =>
+                                                        handleMintToken(
+                                                            row.mintAddress,
+                                                            row.ata,
+                                                            row.mintNumber
+                                                        )
+                                                    }>
+                                                    Mint
+                                                </Button>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                        {!tokenList.length && (
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    padding: 2,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}>
+                                暂无数据
+                            </Box>
+                        )}
+                    </TableContainer>
+                </Stack>
+            </Box>
             {loading && <Loading />}
-        </Box>
+        </>
     );
 };
 export default MintToken;

@@ -12,23 +12,17 @@ import {
     type Connection,
     LAMPORTS_PER_SOL,
     PublicKey,
-    Account,
     TransactionInstruction,
 } from "@solana/web3.js";
 import Loading from "@/components/Loading";
 import {
-    ASSOCIATED_TOKEN_PROGRAM_ID,
-    TOKEN_PROGRAM_ID,
     createAssociatedTokenAccountInstruction,
     createTransferInstruction,
     getAccount,
     getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
-import {
-    createAndSendV0Tx,
-    createAndSendV0TxByWallet,
-} from "@/utils/solana/sendTransaction";
+import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
 import type { WalletAdapterProps } from "@solana/wallet-adapter-base";
 
 const Item = styled(Box)(() => ({
@@ -165,48 +159,50 @@ const TransferToken: React.FC<Props> = ({
         setMintPubkey(new PublicKey(e.target.value));
     };
     return (
-        <Box sx={{ flex: 1, overflow: "auto", paddingLeft: 3 }}>
-            <Typography variant="h4">Transfer Token</Typography>
-            <Stack spacing={5} marginTop={5}>
-                <Item>
-                    <Typography variant="h5">Public Key:</Typography>
-                    <Link
-                        target="_blank"
-                        href={`https://explorer.solana.com/address/${pubkey}?cluster=devnet`}>
-                        {`${pubkey}`}
-                    </Link>
-                </Item>
-                <Item>
-                    <Typography variant="h5">To PubKey:</Typography>
-                    <TextField
-                        hiddenLabel
-                        id="toPubkey"
-                        variant="outlined"
+        <>
+            <Box sx={{ flex: 1, overflowY: "auto", paddingLeft: 3 }}>
+                <Typography variant="h4">Transfer Token</Typography>
+                <Stack spacing={5} marginTop={5}>
+                    <Item>
+                        <Typography variant="h5">Public Key:</Typography>
+                        <Link
+                            target="_blank"
+                            href={`https://explorer.solana.com/address/${pubkey}?cluster=devnet`}>
+                            {`${pubkey}`}
+                        </Link>
+                    </Item>
+                    <Item>
+                        <Typography variant="h5">To PubKey:</Typography>
+                        <TextField
+                            hiddenLabel
+                            id="toPubkey"
+                            variant="outlined"
+                            size="small"
+                            defaultValue={toPubkey}
+                            onChange={handleToPubkeyChange}
+                        />
+                    </Item>
+                    <Item>
+                        <Typography variant="h5">Mint Token Pubkey:</Typography>
+                        <TextField
+                            hiddenLabel
+                            id="toPubkey"
+                            variant="outlined"
+                            size="small"
+                            defaultValue={mintPubkey}
+                            onChange={handleMintTokenChange}
+                        />
+                    </Item>
+                    <Button
+                        variant="contained"
                         size="small"
-                        defaultValue={toPubkey}
-                        onChange={handleToPubkeyChange}
-                    />
-                </Item>
-                <Item>
-                    <Typography variant="h5">Mint Token Pubkey:</Typography>
-                    <TextField
-                        hiddenLabel
-                        id="toPubkey"
-                        variant="outlined"
-                        size="small"
-                        defaultValue={mintPubkey}
-                        onChange={handleMintTokenChange}
-                    />
-                </Item>
-                <Button
-                    variant="contained"
-                    size="small"
-                    onClick={handleTransfer}>
-                    Transfer
-                </Button>
-            </Stack>
+                        onClick={handleTransfer}>
+                        Transfer
+                    </Button>
+                </Stack>
+            </Box>
             {loading && <Loading />}
-        </Box>
+        </>
     );
 };
 export default TransferToken;
