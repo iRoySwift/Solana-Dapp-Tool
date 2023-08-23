@@ -87,6 +87,7 @@ async function createAndSendV0Tx(
  * @param connection             Connection to use from useWallet
  * @param sendTransaction        from useWallet
  * @param txInstructions         Transaction Instruction Array
+ * @param signers                Signer Array
  * @param lookupTableAccount     Address Lookup Table Account
  * @returns                      Promise Transaction signature as base-58 encoded string
  */
@@ -95,6 +96,7 @@ async function createAndSendV0TxByWallet(
     connection: Connection,
     sendTransaction: WalletAdapterProps["sendTransaction"],
     txInstructions: TransactionInstruction[],
+    signers?: Signer[],
     lookupTableAccount?: AddressLookupTableAccount
 ): Promise<TransactionSignature> {
     // * Step 1 - Fetch Latest Blockhash
@@ -134,6 +136,7 @@ async function createAndSendV0TxByWallet(
     const txid = await sendTransaction(transaction, connection, {
         maxRetries: 5,
         minContextSlot,
+        signers,
     });
     console.log("   ✅ - 3. Transaction sent to network");
 

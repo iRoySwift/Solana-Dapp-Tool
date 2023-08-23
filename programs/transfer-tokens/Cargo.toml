@@ -1,12 +1,13 @@
 [package]
-name = "program"
+name = "transfer-tokens"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[features]
-no-entrypoint = []
-
 [dependencies]
-solana-program = "1.6.7"
+solana-program = "1.16.5"
+
+[lib]
+name = "transfer_tokens"
+crate-type = ["cdylib", "lib"]

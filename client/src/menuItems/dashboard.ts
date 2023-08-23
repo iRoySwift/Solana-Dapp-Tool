@@ -22,6 +22,14 @@ const dashboard = {
             icon: icons.Window,
             breadcrumbs: false,
         },
+        {
+            id: "airdrop",
+            title: "Airdrop",
+            type: "item",
+            url: "/airdrop",
+            icon: icons.Window,
+            breadcrumbs: false,
+        },
     ],
 };
 

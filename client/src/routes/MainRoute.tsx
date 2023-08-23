@@ -18,12 +18,18 @@ const Tutorial = Loadable(lazy(() => import("@/pages/Tutorial")));
 const BaseTransfer = Loadable(
     lazy(() => import("@/pages/Tutorial/BaseTransfer"))
 );
-const Airdrop = Loadable(lazy(() => import("@/pages/Tutorial/WalletAdapter")));
+const WalletAdapter = Loadable(
+    lazy(() => import("@/pages/Tutorial/WalletAdapter"))
+);
+const Airdrop = Loadable(lazy(() => import("@/pages/Airdrop")));
 const ContractCall = Loadable(
     lazy(() => import("@/pages/Tutorial/ContractCall"))
 );
 const MintTokenTransfer = Loadable(
     lazy(() => import("@/pages/Tutorial/MintTokenTransfer"))
+);
+const MintTokenTransferByWallet = Loadable(
+    lazy(() => import("@/pages/Tutorial/MintTokenTransferByWallet"))
 );
 
 const MainRoute: RouteObject = {
@@ -36,6 +42,10 @@ const MainRoute: RouteObject = {
             element: <DashBoard />,
         },
         {
+            path: "airdrop",
+            element: <Airdrop />,
+        },
+        {
             path: "tutorial",
             element: <Tutorial />,
             children: [
@@ -45,7 +55,7 @@ const MainRoute: RouteObject = {
                 },
                 {
                     path: "walletAdapter",
-                    element: <Airdrop />,
+                    element: <WalletAdapter />,
                 },
                 {
                     path: "contractCall",
@@ -54,6 +64,10 @@ const MainRoute: RouteObject = {
                 {
                     path: "mintTokenTransfer",
                     element: <MintTokenTransfer />,
+                },
+                {
+                    path: "mintTokenTransferByWallet",
+                    element: <MintTokenTransferByWallet />,
                 },
             ],
         },

@@ -159,13 +159,13 @@ const ContractCall: React.FC<Props> = () => {
         setLoading(true);
 
         // * Step 1 - create an array with your desires `instructions`
-        // let minRent = await connection.getMinimumBalanceForRentExemption(0);
+        let lamports = await connection.getMinimumBalanceForRentExemption(0);
         const txInstructions = [
             createTransferInstruction(
                 ataPubkey,
                 toAtaPubkey,
                 pubkey,
-                count * LAMPORTS_PER_SOL,
+                lamports,
                 TOKEN_PROGRAM_ID
             ),
         ];
