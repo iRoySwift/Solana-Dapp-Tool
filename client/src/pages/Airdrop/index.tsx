@@ -1,32 +1,44 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { getAssociatedTokenAddress } from "@solana/spl-token";
+import { Box, Divider, Stack, Typography } from "@mui/material";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
 import React, { useState } from "react";
-
-const MINT = new PublicKey("CQ68EPr2bHQ29bLZdHioLx5An35hfav1mqn36hG74ofH");
+import TokenList, { type itokenItem } from "./TokenList";
+import TransferToken from "./TransferToken";
 
 interface Props {}
 const Airdrop: React.FC<Props> = () => {
-    const [toPubkey, setToPubkey] = useState<PublicKey>();
-    const [mintPubkey, setMintPubkey] = useState<PublicKey>(MINT);
-    const [loading, setLoading] = useState(false);
-
     // Step 1 连接到Solana网络 devnet
     const { connection } = useConnection();
 
     // Step 2 创建者账号信息（private key）
     const { publicKey: pubkey, sendTransaction } = useWallet();
 
-    const transferToken = () => {
-        // 获取ATA账号
-        getAssociatedTokenAddress(mintPubkey);
-    };
+    // 获取token info 和 destination list
+    const [destinations, setDestinations] = useState<String[]>();
+    const [selectToken, setSelectToken] = useState<itokenItem>();
+
     return (
-        <Stack justifyContent={"center"} alignItems={"center"}>
-            <Typography variant="h2">一键发Token工具</Typography>
-            <Box>ss</Box>
-        </Stack>
+        <Box sx={{ padding: 3, background: "#fff" }}>
+            <Stack justifyContent={"center"} alignItems={"center"}>
+                <Typography variant="h2">一键发Token工具</Typography>
+            </Stack>
+            <Stack flexWrap={"nowrap"} flexDirection={"row"} marginTop={10}>
+                <TokenList
+                    pubkey={pubkey}
+                    sendTransaction={sendTransaction}
+                    connection={connection}
+                    setDestinations={setDestinations}
+                    setSelectToken={setSelectToken}
+                />
+                <Divider orientation="vertical" variant="middle" flexItem />
+                <TransferToken
+                    pubkey={pubkey}
+                    sendTransaction={sendTransaction}
+                    connection={connection}
+                    selectToken={selectToken}
+                    destinations={destinations}
+                />
+            </Stack>
+        </Box>
     );
 };
 export default Airdrop;

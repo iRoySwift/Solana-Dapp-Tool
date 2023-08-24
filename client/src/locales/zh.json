@@ -16,8 +16,7 @@
             "baseTransfer": "基础转账",
             "walletAdapter": "钱包适配器",
             "contractCall": "合约调用",
-            "mintTokenTransfer": "铸造令牌并转发",
-            "mintTokenTransferByWallet": "钱包授权转发token"
+            "mintTokenTransfer": "铸造令牌并转发"
         },
         "greeting": {
             "hello": "你好"

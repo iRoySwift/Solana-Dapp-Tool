@@ -28,9 +28,6 @@ const ContractCall = Loadable(
 const MintTokenTransfer = Loadable(
     lazy(() => import("@/pages/Tutorial/MintTokenTransfer"))
 );
-const MintTokenTransferByWallet = Loadable(
-    lazy(() => import("@/pages/Tutorial/MintTokenTransferByWallet"))
-);
 
 const MainRoute: RouteObject = {
     path: "/",
@@ -64,10 +61,6 @@ const MainRoute: RouteObject = {
                 {
                     path: "mintTokenTransfer",
                     element: <MintTokenTransfer />,
-                },
-                {
-                    path: "mintTokenTransferByWallet",
-                    element: <MintTokenTransferByWallet />,
                 },
             ],
         },

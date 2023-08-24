@@ -46,14 +46,6 @@ const tutorial = {
             icon: icons.Window,
             breadcrumbs: false,
         },
-        {
-            id: "mintTokenTransferByWallet",
-            title: "Mint Token Transfer By Wallet",
-            type: "item",
-            url: "/tutorial/mintTokenTransferByWallet",
-            icon: icons.Window,
-            breadcrumbs: false,
-        },
     ],
 };
 
