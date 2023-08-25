@@ -26,7 +26,7 @@ const dashboard = {
             id: "airdropToken",
             title: "Airdrop Token",
             type: "item",
-            url: "/airdrop",
+            url: "/airdropToken",
             icon: icons.Window,
             breadcrumbs: false,
         },

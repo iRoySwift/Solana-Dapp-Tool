@@ -3,8 +3,13 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import React, { useState } from "react";
 import TokenList, { type itokenItem } from "./TokenList";
 import TransferToken from "./TransferToken";
-import type { PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 interface Props {}
+
+export const PROGRAM_ID = new PublicKey(
+    "BtoQpiVYbrFR7B5PZ5YEvjbiUHtDsEdHmE7c977tk4og"
+);
+
 const AirdropToken: React.FC<Props> = () => {
     // Step 1 连接到Solana网络 devnet
     const { connection } = useConnection();

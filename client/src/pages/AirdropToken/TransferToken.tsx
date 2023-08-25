@@ -20,6 +20,7 @@ import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
 import { enqueueSnackbar } from "notistack";
 import Loading from "@/components/Loading";
 import { getOrCreateAssociatedTokenAccount } from "@/utils/solana";
+import { PROGRAM_ID } from ".";
 
 interface Props {
     connection: Connection;
@@ -50,7 +51,7 @@ const TransferToken: React.FC<Props> = ({
         setLoading(true);
 
         // * Step 1 获取ATA账号
-        const ataPubkey = await getOrCreateAssociatedTokenAccount(
+        const source = await getOrCreateAssociatedTokenAccount(
             connection,
             pubkey,
             selectToken.mint,
@@ -58,13 +59,13 @@ const TransferToken: React.FC<Props> = ({
             sendTransaction
         );
 
-        let toAtaPubkeys = await Promise.all(
-            destinations.map(dest =>
+        let newDestinations = await Promise.all(
+            destinations.map(destination =>
                 getOrCreateAssociatedTokenAccount(
                     connection,
                     pubkey,
                     selectToken.mint,
-                    dest,
+                    destination,
                     sendTransaction
                 )
             )
@@ -75,13 +76,15 @@ const TransferToken: React.FC<Props> = ({
         // * Step 2 - create an array with your desires `instructions`
         let txInstructions: TransactionInstruction[] = [];
 
-        toAtaPubkeys.forEach(toAtaPubkey => {
+        newDestinations.forEach(destination => {
             txInstructions.push(
                 createTransferInstruction(
-                    ataPubkey,
-                    toAtaPubkey,
+                    source,
+                    destination,
                     pubkey,
-                    count * LAMPORTS_PER_SOL
+                    count * LAMPORTS_PER_SOL,
+                    [pubkey],
+                    PROGRAM_ID
                 )
             );
         });

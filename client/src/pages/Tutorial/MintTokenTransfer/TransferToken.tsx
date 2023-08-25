@@ -34,27 +34,27 @@ interface Props {
 }
 const TransferToken: React.FC<Props> = ({ signer, connection }) => {
     const [toPubkey, setToPubkey] = useState<PublicKey>();
-    const [mintPubkey, setMintPubkey] = useState<PublicKey>();
+    const [mint, setMintPubkey] = useState<PublicKey>();
     const [loading, setLoading] = useState(false);
 
     // 创建对应钱包的Token的ATA and transfer
     const handleTransfer = async () => {
-        if (!mintPubkey || !toPubkey) {
+        if (!mint || !toPubkey) {
             return;
         }
         setLoading(true);
 
         // * Step 1 获取ATA账号
-        const ataPubkey = await getOrCreateAssociatedTokenAccount(
+        const source = await getOrCreateAssociatedTokenAccount(
             connection,
             signer,
-            mintPubkey,
+            mint,
             signer.publicKey
         );
-        const toAtaPubkey = await getOrCreateAssociatedTokenAccount(
+        const destination = await getOrCreateAssociatedTokenAccount(
             connection,
             signer,
-            mintPubkey,
+            mint,
             toPubkey
         );
 
@@ -63,8 +63,8 @@ const TransferToken: React.FC<Props> = ({ signer, connection }) => {
         // * Step 2 - create an array with your desires `instructions`
         const txInstructions = [
             createTransferInstruction(
-                ataPubkey.address,
-                toAtaPubkey.address,
+                source.address,
+                destination.address,
                 signer.publicKey,
                 1 * LAMPORTS_PER_SOL
             ),
@@ -132,7 +132,7 @@ const TransferToken: React.FC<Props> = ({ signer, connection }) => {
                         id="toPubkey"
                         variant="outlined"
                         size="small"
-                        defaultValue={mintPubkey}
+                        defaultValue={mint}
                         onChange={handleMintTokenChange}
                     />
                 </Item>

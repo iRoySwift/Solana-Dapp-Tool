@@ -9,14 +9,12 @@ import {
     TokenInvalidOwnerError,
 } from "@solana/spl-token";
 import {
-    Keypair,
     type Connection,
     type PublicKey,
     type TransactionInstruction,
 } from "@solana/web3.js";
 import { createAndSendV0TxByWallet } from "./sendTransaction";
 import type { WalletAdapterProps } from "@solana/wallet-adapter-base";
-import { info } from "console";
 
 /**
  * Retrieve the associated token account, or create it if it doesn't exist

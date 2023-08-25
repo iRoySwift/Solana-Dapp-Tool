@@ -16,7 +16,7 @@
         "noImplicitAny": false,
         "noImplicitThis": true,
         "noUnusedParameters": false,
-        "noUnusedLocals": false,
+        "noUnusedLocals": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "sourceMap": true,
