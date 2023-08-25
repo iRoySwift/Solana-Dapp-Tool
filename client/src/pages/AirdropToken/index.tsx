@@ -3,9 +3,9 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import React, { useState } from "react";
 import TokenList, { type itokenItem } from "./TokenList";
 import TransferToken from "./TransferToken";
-
+import type { PublicKey } from "@solana/web3.js";
 interface Props {}
-const Airdrop: React.FC<Props> = () => {
+const AirdropToken: React.FC<Props> = () => {
     // Step 1 连接到Solana网络 devnet
     const { connection } = useConnection();
 
@@ -13,7 +13,7 @@ const Airdrop: React.FC<Props> = () => {
     const { publicKey: pubkey, sendTransaction } = useWallet();
 
     // 获取token info 和 destination list
-    const [destinations, setDestinations] = useState<String[]>();
+    const [destinations, setDestinations] = useState<PublicKey[]>();
     const [selectToken, setSelectToken] = useState<itokenItem>();
 
     return (
@@ -21,7 +21,11 @@ const Airdrop: React.FC<Props> = () => {
             <Stack justifyContent={"center"} alignItems={"center"}>
                 <Typography variant="h2">一键发Token工具</Typography>
             </Stack>
-            <Stack flexWrap={"nowrap"} flexDirection={"row"} marginTop={10}>
+            <Stack
+                flexWrap={"nowrap"}
+                flexDirection={"row"}
+                width={"100%"}
+                marginTop={10}>
                 <TokenList
                     pubkey={pubkey}
                     sendTransaction={sendTransaction}
@@ -41,4 +45,4 @@ const Airdrop: React.FC<Props> = () => {
         </Box>
     );
 };
-export default Airdrop;
+export default AirdropToken;

@@ -11,7 +11,7 @@
             "color": "色彩",
             "shadow": "阴影",
             "muiIcon": "图标",
-            "airdrop": "空投",
+            "airdropToken": "空投Token",
             "tutorial": "教程",
             "baseTransfer": "基础转账",
             "walletAdapter": "钱包适配器",

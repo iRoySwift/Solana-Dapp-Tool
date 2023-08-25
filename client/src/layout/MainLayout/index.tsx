@@ -44,6 +44,7 @@ const MainLayout: React.FC<Props> = withLayoutContent(
                     />
                     <Box
                         component="main"
+                        overflow={"hidden"}
                         sx={{
                             width: "100%",
                             flexGrow: 1,
@@ -51,7 +52,6 @@ const MainLayout: React.FC<Props> = withLayoutContent(
                         }}>
                         <Toolbar />
                         <BreadCrumbs title />
-                        <div>{process.env.ENV}</div>
                         <Outlet />
                     </Box>
                 </Box>

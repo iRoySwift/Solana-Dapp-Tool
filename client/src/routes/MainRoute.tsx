@@ -21,7 +21,7 @@ const BaseTransfer = Loadable(
 const WalletAdapter = Loadable(
     lazy(() => import("@/pages/Tutorial/WalletAdapter"))
 );
-const Airdrop = Loadable(lazy(() => import("@/pages/Airdrop")));
+const AirdropToken = Loadable(lazy(() => import("@/pages/AirdropToken")));
 const ContractCall = Loadable(
     lazy(() => import("@/pages/Tutorial/ContractCall"))
 );
@@ -39,8 +39,8 @@ const MainRoute: RouteObject = {
             element: <DashBoard />,
         },
         {
-            path: "airdrop",
-            element: <Airdrop />,
+            path: "airdropToken",
+            element: <AirdropToken />,
         },
         {
             path: "tutorial",

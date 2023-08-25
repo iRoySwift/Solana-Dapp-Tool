@@ -25,7 +25,7 @@ interface Props {
     connection: Connection;
     pubkey: PublicKey | null;
     sendTransaction: WalletAdapterProps["sendTransaction"];
-    destinations: String[] | undefined;
+    destinations: PublicKey[] | undefined;
     selectToken: itokenItem | undefined;
 }
 const TransferToken: React.FC<Props> = ({
@@ -53,8 +53,9 @@ const TransferToken: React.FC<Props> = ({
         const ataPubkey = await getOrCreateAssociatedTokenAccount(
             connection,
             pubkey,
-            new PublicKey(selectToken.mint),
-            pubkey
+            selectToken.mint,
+            pubkey,
+            sendTransaction
         );
 
         let toAtaPubkeys = await Promise.all(
@@ -63,10 +64,12 @@ const TransferToken: React.FC<Props> = ({
                     connection,
                     pubkey,
                     selectToken.mint,
-                    new PublicKey(dest)
+                    dest,
+                    sendTransaction
                 )
             )
         );
+
         console.log("   ✅ - Step 1 获取ATA账号");
 
         // * Step 2 - create an array with your desires `instructions`

@@ -11,7 +11,7 @@
             "color": "Color",
             "shadow": "Shadow",
             "muiIcon": "Mui Icons",
-            "airdrop": "Airdrop",
+            "airdropToken": "Airdrop Token",
             "tutorial": "Tutorial",
             "baseTransfer": "Base Transfer",
             "walletAdapter": "Wallet Adapter",

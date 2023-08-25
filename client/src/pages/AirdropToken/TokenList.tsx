@@ -19,25 +19,23 @@ import {
 } from "@mui/material";
 import { TOKEN_PROGRAM_ID, AccountLayout, getMint } from "@solana/spl-token";
 import type { WalletAdapterProps } from "@solana/wallet-adapter-base";
-import {
-    LAMPORTS_PER_SOL,
-    type Connection,
-    type PublicKey,
-} from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, type Connection, PublicKey } from "@solana/web3.js";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 
 function createData(
+    isChecked: boolean,
     mint: PublicKey,
     ata: PublicKey,
     balance: number,
     authority: boolean,
     amount: number
 ) {
-    return { mint, ata, balance, authority, amount };
+    return { isChecked, mint, ata, balance, authority, amount };
 }
 
 export type itokenItem = {
+    isChecked: boolean;
     mint: PublicKey;
     ata: PublicKey;
     authority: Boolean;
@@ -70,7 +68,7 @@ const TokenList: React.FC<Props> = ({
         "6w9P6s2HFHRXRfCSxkatUznwq2cnHxvi52pxZJAJb1Wx": false,
         Gir7LUMrsXHv5gGctKNp6th2Pj7j9qmYR1LSrsHS6Yaj: false,
         HQ9Jn1KNwKyPkDyBmQtXtMWn1DXP52jRGzahx3U2Wfky: false,
-        XXYwxGm1WmoPYG5hCyxRUccvzTSQMoRdThDoxfuRVGt: false,
+        "8jSP1ELAoTw9g4kWXWEuqStFeR5qQW2j67UfVfe23gFX": false,
     });
     const [tokenList, setTokenList] = useState<itokenItem[]>([]);
 
@@ -96,6 +94,7 @@ const TokenList: React.FC<Props> = ({
             const mintInfo = await getMint(connection, accountInfo.mint);
 
             return createData(
+                false,
                 accountInfo.mint,
                 item.pubkey,
                 Number(accountInfo.amount / BigInt(LAMPORTS_PER_SOL)),
@@ -117,6 +116,15 @@ const TokenList: React.FC<Props> = ({
         });
     };
     const handleUpdateRadio = row => {
+        setTokenList(
+            tokenList.map(item => {
+                item.isChecked = false;
+                if (item.ata === row.ata) {
+                    item.isChecked = true;
+                }
+                return item;
+            })
+        );
         setSelectToken(row);
     };
     const handleUpdateMintNumber = (pubkey, v) => {
@@ -182,12 +190,14 @@ const TokenList: React.FC<Props> = ({
     };
     useEffect(() => {
         setDestinations(
-            Object.keys(destinationList).filter(key => destinationList[key])
+            Object.keys(destinationList)
+                .filter(key => destinationList[key])
+                .map(destination => new PublicKey(destination))
         );
     }, [destinationList, setDestinations]);
     return (
         <>
-            <Box sx={{ flex: 1, overflowY: "auto" }}>
+            <Box sx={{ flex: 1, pr: 3, overflowY: "auto" }}>
                 <Box>
                     <Typography variant="h5">
                         请选择需要被空投的钱包地址:
@@ -255,6 +265,7 @@ const TokenList: React.FC<Props> = ({
                                         }}>
                                         <TableCell padding="checkbox">
                                             <Radio
+                                                checked={row.isChecked}
                                                 color="primary"
                                                 inputProps={{
                                                     "aria-labelledby":

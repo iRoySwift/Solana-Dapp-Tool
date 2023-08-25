@@ -57,6 +57,7 @@ const TransferToken: React.FC<Props> = ({ signer, connection }) => {
             mintPubkey,
             toPubkey
         );
+
         console.log("   ✅ - Step 1 获取ATA账号");
 
         // * Step 2 - create an array with your desires `instructions`

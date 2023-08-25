@@ -23,8 +23,8 @@ const dashboard = {
             breadcrumbs: false,
         },
         {
-            id: "airdrop",
-            title: "Airdrop",
+            id: "airdropToken",
+            title: "Airdrop Token",
             type: "item",
             url: "/airdrop",
             icon: icons.Window,
