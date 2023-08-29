@@ -77,8 +77,8 @@ const createMintTokenAndAta = async (
  * Mint Token
  * @param connection      Connection to use from useWallet
  * @param pubkey          Payer of the transaction and initialization fees
- * @param mint            Mint for the account
- * @param destination     Address of the account to mint to
+ * @param mint            Mint Address
+ * @param toPubkey        Address to mint to
  * @param amount          Amount to mint
  * @param sendTransaction from useWallet
  * @returns

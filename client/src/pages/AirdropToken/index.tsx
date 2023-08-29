@@ -7,7 +7,7 @@ import { PublicKey } from "@solana/web3.js";
 interface Props {}
 
 export const PROGRAM_ID = new PublicKey(
-    "BtoQpiVYbrFR7B5PZ5YEvjbiUHtDsEdHmE7c977tk4og"
+    "3vRAsca5nenhXcjJGenqyt4gfUwTB8k3jsfbEWbafCSt"
 );
 
 const AirdropToken: React.FC<Props> = () => {

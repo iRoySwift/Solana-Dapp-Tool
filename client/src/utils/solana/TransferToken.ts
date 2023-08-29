@@ -32,7 +32,7 @@ export async function getOrCreateAssociatedTokenAccount(
     mint: PublicKey,
     owner: PublicKey,
     sendTransaction: WalletAdapterProps["sendTransaction"]
-): Promise<PublicKey> {
+): Promise<Account> {
     let ataAccount = await getAssociatedTokenAddressSync(mint, owner);
 
     // This is the optimal logic, considering TX fee, client-side computation, RPC roundtrips and guaranteed idempotent.
@@ -74,5 +74,5 @@ export async function getOrCreateAssociatedTokenAccount(
     if (!account.mint.equals(mint)) throw new TokenInvalidMintError();
     if (!account.owner.equals(owner)) throw new TokenInvalidOwnerError();
 
-    return ataAccount;
+    return account;
 }

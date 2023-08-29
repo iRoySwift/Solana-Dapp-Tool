@@ -19,7 +19,7 @@ import { createTransferInstruction } from "@solana/spl-token";
 import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
 import { enqueueSnackbar } from "notistack";
 import Loading from "@/components/Loading";
-import { getOrCreateAssociatedTokenAccount } from "@/utils/solana";
+import { getOrCreateAssociatedTokenAccount, mintToken } from "@/utils/solana";
 import { PROGRAM_ID } from ".";
 
 interface Props {
@@ -49,6 +49,18 @@ const TransferToken: React.FC<Props> = ({
             return;
         }
         setLoading(true);
+        // mint token
+        // const ata = await mintToken(
+        //     connection,
+        // pubkey,
+        // mint,
+        // toPubkey,
+        //     new PublicKey("6VX7znCYutpN4z4kyRA6B8uXiK6iPN799efjGr8m3rFX"),
+        //     new PublicKey("HcNd516uaZrcUSr2tVGNeF4H6vCtP2442jV7V1Skaiyk"),
+        //     new PublicKey("8jSP1ELAoTw9g4kWXWEuqStFeR5qQW2j67UfVfe23gFX"),
+        //     1 * LAMPORTS_PER_SOL,
+        //     sendTransaction
+        // );
 
         // * Step 1 获取ATA账号
         const source = await getOrCreateAssociatedTokenAccount(
@@ -79,12 +91,12 @@ const TransferToken: React.FC<Props> = ({
         newDestinations.forEach(destination => {
             txInstructions.push(
                 createTransferInstruction(
-                    source,
-                    destination,
+                    source.address,
+                    destination.address,
                     pubkey,
-                    count * LAMPORTS_PER_SOL,
-                    [pubkey],
-                    PROGRAM_ID
+                    count * LAMPORTS_PER_SOL
+                    // [pubkey],
+                    // PROGRAM_ID
                 )
             );
         });
