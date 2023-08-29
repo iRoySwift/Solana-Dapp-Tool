@@ -3,6 +3,7 @@ import { type RouteObject } from "react-router-dom";
 import Loadable from "@/components/Loadable";
 
 import MainLayout from "@/layout/MainLayout";
+import MintToken from "@/pages/Tutorial/MintToken";
 
 const DashBoard = Loadable(lazy(() => import("@/pages/dashboard")));
 const Colors = Loadable(
@@ -61,6 +62,10 @@ const MainRoute: RouteObject = {
                 {
                     path: "mintTokenTransfer",
                     element: <MintTokenTransfer />,
+                },
+                {
+                    path: "mintToken",
+                    element: <MintToken />,
                 },
             ],
         },

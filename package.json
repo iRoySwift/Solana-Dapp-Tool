@@ -13,6 +13,11 @@
     "scripts": {
         "client:build": "./package.sh client run build",
         "client:install": "./package.sh client install",
-        "client:start": "./package.sh client start"
+        "client:start": "./package.sh client start",
+        "clean": "npm run clean:programs",
+        "build:programs:transfer-token": "cargo build-sbf --manifest-path=programs/transfer-tokens/Cargo.toml --sbf-out-dir=programs/dist/transfer-tokens",
+        "clean:programs": "cargo clean --manifest-path=programs/transfer-tokens/Cargo.toml && rm -rf ./programs/dist",
+        "test:program-rust": "cargo test-bpf --manifest-path=programs/transfer-tokens/Cargo.toml",
+        "pretty": "prettier --write '{,src/**/}*.ts'"
     }
 }

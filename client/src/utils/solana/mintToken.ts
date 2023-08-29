@@ -1,10 +1,10 @@
 import {
-    ASSOCIATED_TOKEN_PROGRAM_ID,
     MINT_SIZE,
     TOKEN_PROGRAM_ID,
     createAssociatedTokenAccountInstruction,
     createInitializeMint2Instruction,
     createMintToInstruction,
+    getAccount,
     getAssociatedTokenAddressSync,
     getMinimumBalanceForRentExemptMint,
 } from "@solana/spl-token";
@@ -14,6 +14,7 @@ import {
     SystemProgram,
     type Connection,
     type PublicKey,
+    TransactionInstruction,
 } from "@solana/web3.js";
 import { enqueueSnackbar } from "notistack";
 import { createAndSendV0TxByWallet } from "./sendTransaction";
@@ -34,14 +35,7 @@ const createMintTokenAndAta = async (
     const mintKeypair = Keypair.generate();
 
     // * Step 1 - create an array with your desires `instructions`
-    // 获取ATA账号
-    const ataAccount = getAssociatedTokenAddressSync(
-        mintKeypair.publicKey,
-        pubkey,
-        false,
-        TOKEN_PROGRAM_ID,
-        ASSOCIATED_TOKEN_PROGRAM_ID
-    );
+
     const lamports = await getMinimumBalanceForRentExemptMint(connection);
     const instructions = [
         SystemProgram.createAccount({
@@ -56,13 +50,6 @@ const createMintTokenAndAta = async (
             9,
             pubkey,
             pubkey
-        ),
-        // 创建AYTA
-        createAssociatedTokenAccountInstruction(
-            pubkey,
-            ataAccount,
-            pubkey,
-            mintKeypair.publicKey
         ),
     ];
     console.log(
@@ -100,15 +87,32 @@ const mintToken = async (
     connection: Connection,
     pubkey: PublicKey,
     mint: PublicKey,
-    destination: PublicKey,
+    toPubkey: PublicKey,
     amount: number,
     sendTransaction: WalletAdapterProps["sendTransaction"]
-) => {
+): Promise<PublicKey> => {
     // * Step 1 - create an array with your desires `instructions`
-    const instructions = [
+    // 获取ATA账号
+    const ataAccount = getAssociatedTokenAddressSync(mint, toPubkey);
+
+    let instructions: TransactionInstruction[] = [];
+    try {
+        await getAccount(connection, ataAccount);
+    } catch (error) {
+        // 创建AYTA
+        instructions.push(
+            createAssociatedTokenAccountInstruction(
+                pubkey,
+                ataAccount,
+                toPubkey,
+                mint
+            )
+        );
+    }
+    instructions.push(
         // mint token
-        createMintToInstruction(mint, destination, pubkey, amount),
-    ];
+        createMintToInstruction(mint, ataAccount, pubkey, amount)
+    );
 
     // * Step 2 - Generate a transaction and send it to the network
     const txid = await createAndSendV0TxByWallet(
@@ -123,7 +127,7 @@ const mintToken = async (
 
     enqueueSnackbar("🎉 Transaction succesfully confirmed!");
     enqueueSnackbar(`https://explorer.solana.com/tx/${txid}?cluster=devnet`);
-    return txid;
+    return ataAccount;
 };
 
 export { createMintTokenAndAta, mintToken };

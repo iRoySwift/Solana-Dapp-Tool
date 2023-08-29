@@ -46,6 +46,14 @@ const tutorial = {
             icon: icons.Window,
             breadcrumbs: false,
         },
+        {
+            id: "mintToken",
+            title: "Mint Token",
+            type: "item",
+            url: "/tutorial/mintToken",
+            icon: icons.Window,
+            breadcrumbs: false,
+        },
     ],
 };
 
