@@ -4,6 +4,7 @@ import Loadable from "@/components/Loadable";
 
 import MainLayout from "@/layout/MainLayout";
 import MintToken from "@/pages/Tutorial/MintToken";
+import MintTokenTransferWallet from "@/pages/Tutorial/MintTokenTransferWallet";
 
 const DashBoard = Loadable(lazy(() => import("@/pages/dashboard")));
 const Colors = Loadable(
@@ -66,6 +67,10 @@ const MainRoute: RouteObject = {
                 {
                     path: "mintToken",
                     element: <MintToken />,
+                },
+                {
+                    path: "mintTokenTransferByWallet",
+                    element: <MintTokenTransferWallet />,
                 },
             ],
         },

@@ -17,6 +17,7 @@
             "walletAdapter": "钱包适配器",
             "contractCall": "合约调用",
             "mintTokenTransfer": "铸造令牌并转发",
+            "mintTokenTransferByWallet": "铸造令牌并用钱包转发",
             "mintToken": "铸造令牌"
         },
         "greeting": {
