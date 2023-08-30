@@ -23,7 +23,6 @@ import {
     getOrCreateAssociatedTokenAccount,
     // mintToken
 } from "@/utils/solana";
-import { PROGRAM_ID } from ".";
 
 interface Props {
     connection: Connection;

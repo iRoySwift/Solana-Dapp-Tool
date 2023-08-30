@@ -64,12 +64,6 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
     const [loading, setLoading] = useState(false);
 
     const handleQueryWallet = async () => {
-        if (!signer.publicKey) {
-            enqueueSnackbar(`Please connect to your wallet`, {
-                variant: "warning",
-            });
-            return;
-        }
         connection.getBalance(signer.publicKey).then(balance => {
             enqueueSnackbar(
                 `${signer.publicKey} has a balance of ${
@@ -209,13 +203,12 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
 
     const handleUpdateMintNumber = (pubkey, v) => {
         console.log(v);
-        let arr = tokenList.map(item => {
+        tokenList.map(item => {
             if (item.ata === pubkey) {
                 item.mintNumber = Number(v.target.value);
             }
             return item;
         });
-        console.log(arr, tokenList);
     };
 
     return (
@@ -240,9 +233,6 @@ const MintToken: React.FC<Props> = ({ signer, connection }) => {
                         Query
                     </Button>
                 </Stack>
-                {/* <Stack direction="row" alignItems="center" spacing={2}>
-                    <Typography variant="h5">Airdrop:</Typography>
-                </Stack> */}
                 <Item>
                     <Button
                         variant="outlined"

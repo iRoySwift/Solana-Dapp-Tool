@@ -1,5 +1,5 @@
 import Loading from "@/components/Loading";
-import { createMintTokenAndAta, mintToken } from "@/utils/solana/mintToken";
+import { mintToken } from "@/utils/solana/mintToken";
 import {
     Box,
     Typography,
@@ -26,17 +26,19 @@ import React, { useEffect, useState } from "react";
 function createData(
     isChecked: boolean,
     mint: PublicKey,
+    owner: PublicKey,
     ata: PublicKey,
     balance: number,
     authority: boolean,
     amount: number
 ) {
-    return { isChecked, mint, ata, balance, authority, amount };
+    return { isChecked, mint, owner, ata, balance, authority, amount };
 }
 
 export type itokenItem = {
     isChecked: boolean;
     mint: PublicKey;
+    owner: PublicKey;
     ata: PublicKey;
     authority: Boolean;
     balance: Number;
@@ -83,6 +85,10 @@ const TokenList: React.FC<Props> = ({
         const result: any = await connection.getTokenAccountsByOwner(pubkey, {
             programId: TOKEN_PROGRAM_ID,
         });
+        console.log(
+            "🚀 ~ file: TokenList.tsx:86 ~ queryTokenList ~ result:",
+            result
+        );
 
         let arr: itokenItem[] = await result.value.map(async item => {
             // 处理Unit8Array数据
@@ -96,6 +102,7 @@ const TokenList: React.FC<Props> = ({
             return createData(
                 false,
                 accountInfo.mint,
+                pubkey,
                 item.pubkey,
                 Number(accountInfo.amount / BigInt(LAMPORTS_PER_SOL)),
                 mintInfo.mintAuthority?.toBase58() === pubkey.toBase58(),
@@ -104,6 +111,10 @@ const TokenList: React.FC<Props> = ({
         });
 
         Promise.all(arr).then(res => {
+            console.log(
+                "🚀 ~ file: TokenList.tsx:107 ~ Promise.all ~ res:",
+                res
+            );
             setTokenList(res);
             setLoading(false);
         });
@@ -136,32 +147,10 @@ const TokenList: React.FC<Props> = ({
         });
     };
 
-    // 创建Token
-    const createToken = async () => {
-        if (!pubkey) {
-            AlertTip();
-            return;
-        }
-        setLoading(true);
-        // 创建一个新的 mint （铸币）
-        const mint: PublicKey = await createMintTokenAndAta(
-            connection,
-            pubkey,
-            sendTransaction
-        );
-        console.log(`   ✅ - Token mint address: ${mint.toBase58()}`);
-
-        setLoading(false);
-
-        enqueueSnackbar("🎉 Mint Token succesfully!", {
-            variant: "success",
-        });
-    };
-
     // Mint Token
     const handleMintToken = async (
         mint: PublicKey,
-        ata: PublicKey,
+        owner: PublicKey,
         amount: number
     ) => {
         if (!pubkey) {
@@ -174,7 +163,7 @@ const TokenList: React.FC<Props> = ({
             connection,
             pubkey,
             mint,
-            ata,
+            owner,
             amount * LAMPORTS_PER_SOL,
             sendTransaction
         );
@@ -182,7 +171,7 @@ const TokenList: React.FC<Props> = ({
         setLoading(false);
 
         console.log(
-            `   ✅ - Mint ${amount} Token To ${ata.toBase58()} transaction:${Signature}`
+            `   ✅ - Mint ${amount} Token To ${owner.toBase58()} transaction:${Signature}`
         );
         enqueueSnackbar(`🎉 Mint ${amount} Token succesfully!`, {
             variant: "success",
@@ -219,13 +208,9 @@ const TokenList: React.FC<Props> = ({
                     </FormGroup>
                 </Box>
                 <Box sx={{ marginTop: 10 }}>
-                    <Typography variant="h5">你拥有的Token列表:</Typography>
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={createToken}>
-                        Create Token
-                    </Button>
+                    <Typography variant="h5">
+                        你({`${pubkey}`})拥有的Token列表:
+                    </Typography>
                     <Button
                         variant="outlined"
                         size="small"
@@ -240,6 +225,7 @@ const TokenList: React.FC<Props> = ({
                                 <TableRow>
                                     <TableCell padding="checkbox"></TableCell>
                                     <TableCell>Mint</TableCell>
+                                    <TableCell>Owner</TableCell>
                                     <TableCell>ATA</TableCell>
                                     <TableCell align="right">
                                         Balance(Number)
@@ -279,6 +265,9 @@ const TokenList: React.FC<Props> = ({
                                         <TableCell component="th" scope="row">
                                             {`${row.mint}`}
                                         </TableCell>
+                                        <TableCell component="th" scope="row">
+                                            {`${row.owner}`}
+                                        </TableCell>
                                         <TableCell align="right">
                                             {`${row.ata}`}
                                         </TableCell>
@@ -312,7 +301,7 @@ const TokenList: React.FC<Props> = ({
                                                     onClick={() =>
                                                         handleMintToken(
                                                             row.mint,
-                                                            row.ata,
+                                                            row.owner,
                                                             row.amount
                                                         )
                                                     }>

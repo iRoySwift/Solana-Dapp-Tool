@@ -25,7 +25,8 @@ const MintTokenTransfer: React.FC<Props> = () => {
                 alignItems="center"
                 sx={{ background: "#fff" }}
                 p={3}>
-                <Typography variant="h2">Mint Token and Transfer</Typography>
+                <Typography variant="h2">基础Token空投</Typography>
+                <Typography variant="h3">Don't connect wallet</Typography>
                 <Box
                     sx={{
                         width: "100%",

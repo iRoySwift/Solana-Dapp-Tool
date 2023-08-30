@@ -19,7 +19,10 @@ import { createTransferInstruction } from "@solana/spl-token";
 import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
 import { enqueueSnackbar } from "notistack";
 import Loading from "@/components/Loading";
-import { getOrCreateAssociatedTokenAccount, mintToken } from "@/utils/solana";
+import {
+    getOrCreateAssociatedTokenAccount,
+    // mintToken
+} from "@/utils/solana";
 import { PROGRAM_ID } from ".";
 
 interface Props {
@@ -94,9 +97,9 @@ const TransferToken: React.FC<Props> = ({
                     source.address,
                     destination.address,
                     pubkey,
-                    count * LAMPORTS_PER_SOL
-                    // [pubkey],
-                    // PROGRAM_ID
+                    count * LAMPORTS_PER_SOL,
+                    [],
+                    PROGRAM_ID
                 )
             );
         });

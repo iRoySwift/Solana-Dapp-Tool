@@ -1,5 +1,5 @@
 import Loading from "@/components/Loading";
-import { createMintTokenAndAta, mintToken } from "@/utils/solana/mintToken";
+import { createToken, mintToken } from "@/utils/solana/mintToken";
 import {
     Box,
     Typography,
@@ -137,14 +137,14 @@ const TokenList: React.FC<Props> = ({
     };
 
     // 创建Token
-    const createToken = async () => {
+    const handleCreateToken = async () => {
         if (!pubkey) {
             AlertTip();
             return;
         }
         setLoading(true);
         // 创建一个新的 mint （铸币）
-        const mint: PublicKey = await createMintTokenAndAta(
+        const mint: PublicKey = await createToken(
             connection,
             pubkey,
             sendTransaction
@@ -223,7 +223,7 @@ const TokenList: React.FC<Props> = ({
                     <Button
                         variant="outlined"
                         size="small"
-                        onClick={createToken}>
+                        onClick={handleCreateToken}>
                         Create Token
                     </Button>
                     <Button

@@ -16,8 +16,8 @@
             "baseTransfer": "Base Transfer",
             "walletAdapter": "Wallet Adapter",
             "contractCall": "Contract Call",
-            "mintTokenTransfer": "Mint Token Transfer",
-            "mintTokenTransferByWallet": "Mint Token Transfer By Wallet",
+            "baseTokenAirdrop": "Base Token Airdrop",
+            "transferToken": "Transfer Tokens",
             "mintToken": "Mint Token"
         },
         "greeting": {

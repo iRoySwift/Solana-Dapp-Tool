@@ -1,4 +1,4 @@
 import { getOrCreateAssociatedTokenAccount } from "./TransferToken";
-import { createMintTokenAndAta, mintToken } from "./mintToken";
+import { createToken, mintToken } from "./mintToken";
 
-export { getOrCreateAssociatedTokenAccount, createMintTokenAndAta, mintToken };
+export { getOrCreateAssociatedTokenAccount, createToken, mintToken };

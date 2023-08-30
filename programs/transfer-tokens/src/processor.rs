@@ -26,5 +26,18 @@ pub fn process_instruction(
         instruction_data,
         account
     );
+    let accounts_iter = &mut accounts.into_iter();
+
+    let mintAta = next_account_info(accounts_iter)?;
+    let toPubkeyAta = next_account_info(accounts_iter)?;
+    let pubkeyAta = next_account_info(accounts_iter)?;
+
+    msg!(
+        "mintAta: {}, toPubkeyAta:{},pubkeyAta:{}",
+        mintAta,
+        toPubkeyAta,
+        pubkeyAta
+    );
+
     Ok(())
 }

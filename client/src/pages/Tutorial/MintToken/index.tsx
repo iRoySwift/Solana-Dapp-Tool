@@ -1,5 +1,5 @@
 import { AlertTip } from "@/pages/AirdropToken/TokenList";
-import { createMintTokenAndAta, mintToken } from "@/utils/solana";
+import { createToken, mintToken } from "@/utils/solana";
 import {
     Box,
     Button,
@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import Loading from "@/components/Loading";
 
 interface Props {}
+
 const MintToken: React.FC<Props> = () => {
     // Step 1 连接到Solana网络 devnet
     const { connection } = useConnection();
@@ -45,7 +46,7 @@ const MintToken: React.FC<Props> = () => {
         }
         setLoading(true);
         // 创建一个新的 mint （铸币）
-        const mint: PublicKey = await createMintTokenAndAta(
+        const mint: PublicKey = await createToken(
             connection,
             pubkey,
             sendTransaction

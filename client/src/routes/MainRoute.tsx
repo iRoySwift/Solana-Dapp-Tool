@@ -3,8 +3,6 @@ import { type RouteObject } from "react-router-dom";
 import Loadable from "@/components/Loadable";
 
 import MainLayout from "@/layout/MainLayout";
-import MintToken from "@/pages/Tutorial/MintToken";
-import MintTokenTransferWallet from "@/pages/Tutorial/MintTokenTransferWallet";
 
 const DashBoard = Loadable(lazy(() => import("@/pages/dashboard")));
 const Colors = Loadable(
@@ -27,8 +25,13 @@ const AirdropToken = Loadable(lazy(() => import("@/pages/AirdropToken")));
 const ContractCall = Loadable(
     lazy(() => import("@/pages/Tutorial/ContractCall"))
 );
-const MintTokenTransfer = Loadable(
-    lazy(() => import("@/pages/Tutorial/MintTokenTransfer"))
+const BaseTokenAirdrop = Loadable(
+    lazy(() => import("@/pages/Tutorial/BaseTokenAirdrop"))
+);
+const MintToken = Loadable(lazy(() => import("@/pages/Tutorial/MintToken")));
+
+const TransferToken = Loadable(
+    lazy(() => import("@/pages/Tutorial/TransferToken"))
 );
 
 const MainRoute: RouteObject = {
@@ -61,16 +64,16 @@ const MainRoute: RouteObject = {
                     element: <ContractCall />,
                 },
                 {
-                    path: "mintTokenTransfer",
-                    element: <MintTokenTransfer />,
-                },
-                {
                     path: "mintToken",
                     element: <MintToken />,
                 },
                 {
-                    path: "mintTokenTransferByWallet",
-                    element: <MintTokenTransferWallet />,
+                    path: "baseTokenAirdrop",
+                    element: <BaseTokenAirdrop />,
+                },
+                {
+                    path: "transferToken",
+                    element: <TransferToken />,
                 },
             ],
         },

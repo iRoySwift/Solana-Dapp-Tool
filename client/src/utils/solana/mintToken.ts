@@ -20,18 +20,18 @@ import { enqueueSnackbar } from "notistack";
 import { createAndSendV0TxByWallet } from "./sendTransaction";
 
 /**
- * 创建Token and ATA
+ * 创建Token
  * @param connection       Connection to use from useWallet
  * @param pubkey           Payer of the transaction and initialization fees
  * @param sendTransaction  from useWallet
  * @param keypair          Optional keypair, defaulting to a new random one
  * @returns
  */
-const createMintTokenAndAta = async (
+const createToken = async (
     connection: Connection,
     pubkey: PublicKey,
     sendTransaction: WalletAdapterProps["sendTransaction"]
-) => {
+): Promise<PublicKey> => {
     const mintKeypair = Keypair.generate();
 
     // * Step 1 - create an array with your desires `instructions`
@@ -94,6 +94,11 @@ const mintToken = async (
     // * Step 1 - create an array with your desires `instructions`
     // 获取ATA账号
     const ataAccount = getAssociatedTokenAddressSync(mint, toPubkey);
+    console.log(
+        "🚀 ~ file: mintToken.ts:94 ~ toPubkey:",
+        toPubkey.toBase58(),
+        ataAccount.toBase58()
+    );
 
     let instructions: TransactionInstruction[] = [];
     try {
@@ -130,4 +135,4 @@ const mintToken = async (
     return ataAccount;
 };
 
-export { createMintTokenAndAta, mintToken };
+export { createToken, mintToken };
