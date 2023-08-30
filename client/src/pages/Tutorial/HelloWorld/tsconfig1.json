@@ -1,15 +1,16 @@
 {
     "compilerOptions": {
         "target": "ESNext",
+        "module": "ESNext", // package.json type: "module"
+        "types": ["node"],
+        "moduleResolution": "NodeNext",
         "lib": ["dom", "dom.iterable", "esnext"],
         "strict": true,
-        "module": "ESNext",
-        "moduleResolution": "NodeNext",
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "noEmit": true,
-        "allowImportingTsExtensions": true,
-        "verbatimModuleSyntax": true,
+        // "allowImportingTsExtensions": true,
+        // "verbatimModuleSyntax": true,
         "forceConsistentCasingInFileNames": true,
         "alwaysStrict": true,
         "experimentalDecorators": true,
@@ -24,12 +25,11 @@
         "preserveConstEnums": true,
         "allowJs": false,
         "allowSyntheticDefaultImports": true,
-        "allowArbitraryExtensions": true,
+        // "allowArbitraryExtensions": true,
         "skipLibCheck": true,
         "jsx": "react-jsx",
         "noFallthroughCasesInSwitch": true
     },
     "include": ["src"],
-    "exclude": ["node_modules", ".vscode"],
-    "extends": "./tsconfig.paths.json"
+    "exclude": ["node_modules", ".vscode"]
 }

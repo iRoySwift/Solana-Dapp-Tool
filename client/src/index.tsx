@@ -8,6 +8,7 @@ import store from "./store";
 import "@/utils/i18n";
 import "./index.css";
 import { Buffer } from "buffer";
+
 window.Buffer = Buffer;
 
 const root = ReactDOM.createRoot(
