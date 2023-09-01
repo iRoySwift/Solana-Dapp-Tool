@@ -1,3 +1,5 @@
+//! Program instruction processor
+
 use borsh::{BorshDeserialize, BorshSerialize};
 use solana_program::{
     account_info::{next_account_info, AccountInfo},
@@ -7,52 +9,69 @@ use solana_program::{
     pubkey::Pubkey,
 };
 
-/// Define the type of state stored in accounts
-#[derive(BorshSerialize, BorshDeserialize, Debug)]
-pub struct GreetingAccount {
-    /// number of greetings
-    pub counter: u32,
-}
+use crate::{
+    error::GreetingAccountError, instruction::GreetingAccountInstruction, state::GreetingAccount,
+};
+/// Struct
+pub struct Processor {}
 
-// Program entrypoint's implementation
-pub fn process_instruction(
-    program_id: &Pubkey, // Public key of the account the hello world program was loaded into
-    accounts: &[AccountInfo], // The account to say hello to
-    _instruction_data: &[u8], // Ignored, all helloworld instructions are hellos
-) -> ProgramResult {
-    // Iterating accounts is safer than indexing
-    let accounts_iter = &mut accounts.iter();
+impl Processor {
+    ///执行 合约
+    pub fn process_greeting(
+        program_id: &Pubkey, // Public key of the account the hello world program was loaded into
+        accounts: &[AccountInfo], // The account to say hello to
+        counter: u32,        // The counter
+    ) -> ProgramResult {
+        // Iterating accounts is safer than indexing
+        let accounts_iter = &mut accounts.iter();
 
-    // Get the account to say hello to
-    let account = next_account_info(accounts_iter)?;
+        // Get the account to say hello to
+        let account = next_account_info(accounts_iter)?;
 
-    // The account must be owned by the program in order to modify its data
-    if account.owner != program_id {
-        msg!("Greeted account does not have the correct program id");
-        return Err(ProgramError::IncorrectProgramId);
+        // The account must be owned by the program in order to modify its data
+        if account.owner != program_id {
+            msg!("Greeted account does not have the correct program id");
+            return Err(GreetingAccountError::NotOwnedByGreetingAccount.into());
+        }
+
+        // Increment and store the number of times the account has been greeted
+        let mut greeting_account = GreetingAccount::try_from_slice(&account.data.borrow())?;
+        greeting_account.counter += counter;
+        greeting_account.serialize(&mut &mut account.data.borrow_mut()[..])?;
+
+        msg!("Greeted {} time(s)!", greeting_account.counter);
+        Ok(())
     }
 
-    // Increment and store the number of times the account has been greeted
-    let mut greeting_account = GreetingAccount::try_from_slice(&account.data.borrow())?;
+    /// Program entrypoint's implementation
+    pub fn process_instruction(
+        program_id: &Pubkey, // Public key of the account the hello world program was loaded into
+        accounts: &[AccountInfo], // The account to say hello to
+        instruction_data: &[u8], // Ignored, all helloworld instructions are hellos
+    ) -> ProgramResult {
+        msg!("Beginning processing");
 
-    println!("greeting_account{:?}", greeting_account);
+        let instruction = GreetingAccountInstruction::try_from_slice(instruction_data)
+            .map_err(|_| ProgramError::InvalidInstructionData)?;
 
-    greeting_account.counter += 1;
-    // greeting_account.greeting = String::from("hello");
+        msg!("Instruction unpacked");
 
-    println!("greeting_account2{:?}", greeting_account);
-    println!("account.data.borrow_mut(){:?}", account.data.borrow_mut());
-    greeting_account.serialize(&mut &mut account.data.borrow_mut()[..])?;
+        match instruction {
+            GreetingAccountInstruction::Greeting { counter } => {
+                msg!("Instruction: Greeting");
+                Self::process_greeting(program_id, accounts, counter)?;
+            }
+        }
 
-    msg!("Greeted {} time(s)!", greeting_account.counter);
-
-    Ok(())
+        Ok(())
+    }
 }
 
 // Sanity tests
 #[cfg(test)]
 mod tests {
-    use crate::{entrypoint::process_instruction, processor::GreetingAccount};
+    use super::*;
+    use crate::processor::GreetingAccount;
     use borsh::BorshDeserialize;
     use solana_program::{account_info::AccountInfo, pubkey::Pubkey, stake_history::Epoch};
     use std::mem;
@@ -94,14 +113,14 @@ mod tests {
                 .counter,
             0
         );
-        process_instruction(&program_id, &accounts, &instruction_data).unwrap();
+        Processor::process_instruction(&program_id, &accounts, &instruction_data).unwrap();
         assert_eq!(
             GreetingAccount::try_from_slice(&accounts[0].data.borrow())
                 .unwrap()
                 .counter,
             1
         );
-        process_instruction(&program_id, &accounts, &instruction_data).unwrap();
+        Processor::process_instruction(&program_id, &accounts, &instruction_data).unwrap();
         assert_eq!(
             GreetingAccount::try_from_slice(&accounts[0].data.borrow())
                 .unwrap()

@@ -18,7 +18,7 @@
         "build:programs:hello-world": "cargo build-sbf --manifest-path=programs/hello-world/Cargo.toml --sbf-out-dir=programs/dist/hello-world",
         "build:programs:transfer-token": "cargo build-sbf --manifest-path=programs/transfer-tokens/Cargo.toml --sbf-out-dir=programs/dist/transfer-tokens",
         "clean:programs": "cargo clean --manifest-path=programs/transfer-tokens/Cargo.toml && rm -rf ./programs/dist",
-        "test:program-rust": "cargo test-bpf --manifest-path=programs/transfer-tokens/Cargo.toml",
+        "test:program-rust": "cargo test-sbf --manifest-path=programs/transfer-tokens/Cargo.toml",
         "pretty": "prettier --write '{,src/**/}*.ts'"
     }
 }

@@ -1,5 +1,5 @@
 use borsh::BorshDeserialize;
-use hello_world::processor::{process_instruction, GreetingAccount};
+use hello_world::{entrypoint::process_instruction, state::GreetingAccount};
 use solana_program_test::*;
 use solana_sdk::{
     account::Account,

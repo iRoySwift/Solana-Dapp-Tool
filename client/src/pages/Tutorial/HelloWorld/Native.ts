@@ -59,6 +59,36 @@ const GreetingSchema = new Map([
 //     },
 // };
 
+class Assignable {
+    constructor(propertities) {
+        Object.keys(propertities).map(key => {
+            this[key] = propertities[key];
+        });
+    }
+}
+
+// Our instruction payload vocabulary
+class GreetingAccountInstruction extends Assignable {}
+
+// Borsh needs a schema describing the payload
+const GreetingAccountInstructionSchema = new Map([
+    [
+        GreetingAccountInstruction,
+        {
+            kind: "struct",
+            fields: [
+                ["id", "u8"],
+                ["counter", "u32"],
+            ],
+        },
+    ],
+]);
+
+// Instruction Variant indexes
+enum InstructionVariant {
+    Greeting = 0,
+}
+
 /**
  * The expected size of each greeting account.
  */
@@ -85,6 +115,16 @@ const test = async () => {
         space: GREETING_SIZE,
     });
 
+    const helloTx = new GreetingAccountInstruction({
+        id: InstructionVariant.Greeting,
+        counter: 2,
+    });
+
+    //serialize the payload
+    const helloSerBuffer = Buffer.from(
+        borsh.serialize(GreetingAccountInstructionSchema, helloTx)
+    );
+
     // Create greet instruction
     const greetIx = new web3.TransactionInstruction({
         keys: [
@@ -95,6 +135,7 @@ const test = async () => {
             },
         ],
         programId: pg.PROGRAM_ID,
+        data: helloSerBuffer,
     });
 
     // Create transaction and add the instructions
