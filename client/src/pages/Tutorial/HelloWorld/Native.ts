@@ -103,10 +103,6 @@ const test = async () => {
     const lamports = await pg.connection.getMinimumBalanceForRentExemption(
         GREETING_SIZE
     );
-    console.log(
-        "🚀 ~ file: Native.test.ts:81 ~ it ~ pg.PROGRAM_ID:",
-        pg.PROGRAM_ID
-    );
     const createGreetingAccountIx = SystemProgram.createAccount({
         fromPubkey: pg.wallet.publicKey,
         lamports,
