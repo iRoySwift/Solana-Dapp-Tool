@@ -74,9 +74,7 @@ enum InstructionVariant {
 
 class Assignable {
     constructor(propertities) {
-        Object.keys(propertities).map(key => {
-            this[key] = propertities[key];
-        });
+        Object.keys(propertities).map(key => (this[key] = propertities[key]));
     }
 }
 
