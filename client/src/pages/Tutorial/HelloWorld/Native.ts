@@ -59,6 +59,19 @@ const GreetingSchema = new Map([
 //     },
 // };
 
+/**
+ * The expected size of each greeting account.
+ */
+const GREETING_SIZE = borsh.serialize(
+    GreetingSchema as unknown as borsh.Schema,
+    new GreetingAccount()
+).length;
+
+// Instruction Variant indexes
+enum InstructionVariant {
+    Greeting = 0,
+}
+
 class Assignable {
     constructor(propertities) {
         Object.keys(propertities).map(key => {
@@ -84,21 +97,9 @@ const GreetingAccountInstructionSchema = new Map([
     ],
 ]);
 
-// Instruction Variant indexes
-enum InstructionVariant {
-    Greeting = 0,
-}
-
-/**
- * The expected size of each greeting account.
- */
-const GREETING_SIZE = borsh.serialize(
-    GreetingSchema as unknown as borsh.Schema,
-    new GreetingAccount()
-).length;
-
 const test = async () => {
     // Create greetings account instruction
+    // 创建新账号去问好，合约中有owner校验，只能合约创建的账号可以调用合约
     const greetingAccountKp = new web3.Keypair();
     const lamports = await pg.connection.getMinimumBalanceForRentExemption(
         GREETING_SIZE
@@ -111,6 +112,7 @@ const test = async () => {
         space: GREETING_SIZE,
     });
 
+    // 发送的数据
     const helloTx = new GreetingAccountInstruction({
         id: InstructionVariant.Greeting,
         counter: 2,
@@ -123,6 +125,7 @@ const test = async () => {
 
     // Create greet instruction
     const greetIx = new web3.TransactionInstruction({
+        // 1. The public keys of all the accounts the instruction will read/write
         keys: [
             {
                 pubkey: greetingAccountKp.publicKey,
@@ -130,7 +133,11 @@ const test = async () => {
                 isWritable: true,
             },
         ],
+
+        // 2. The ID of the program this instruction will be sent to
         programId: pg.PROGRAM_ID,
+
+        // 3. Data - in this case, there's none!
         data: helloSerBuffer,
     });
 
