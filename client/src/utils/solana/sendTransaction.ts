@@ -22,6 +22,7 @@ async function createAndSendV0Tx(
     signer: Signer,
     connection: Connection,
     ixs: TransactionInstruction[],
+    signers?: Signer[],
     lookupTableAccount?: AddressLookupTableAccount
 ): Promise<TransactionSignature> {
     // * Step 1 - Fetch Latest Blockhash
@@ -54,7 +55,7 @@ async function createAndSendV0Tx(
 
     // * Step 3 - Sign your transaction with the required `Signers`
     const transaction = new VersionedTransaction(messageV0);
-    transaction.sign([signer]);
+    signers && transaction.sign(signers);
     console.log("   ✅ - 3. Transaction Signed");
 
     // * Step 4 - Send our v0 transaction to the cluster

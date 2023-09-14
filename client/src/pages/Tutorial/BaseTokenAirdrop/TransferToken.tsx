@@ -77,7 +77,8 @@ const TransferToken: React.FC<Props> = ({ signer, connection }) => {
         const txid = await createAndSendV0Tx(
             signer,
             connection,
-            txInstructions
+            txInstructions,
+            [signer]
         );
         console.log(
             "   ✅ - Step 3 - Generate a transaction and send it to the network"

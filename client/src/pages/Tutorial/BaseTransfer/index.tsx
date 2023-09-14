@@ -101,7 +101,9 @@ const BaseTransfer: React.FC<Props> = () => {
         );
 
         // * Step 2 - Generate a transaction and send it to the network
-        const txid = await createAndSendV0Tx(signer, connection, instructions);
+        const txid = await createAndSendV0Tx(signer, connection, instructions, [
+            signer,
+        ]);
         console.log(
             "   ✅ - Step 2 - Generate a transaction and send it to the network"
         );
