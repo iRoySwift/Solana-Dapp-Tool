@@ -1,5 +1,4 @@
-import PropTypes from "prop-types";
-import { Link, To } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // material-ui
 import { ButtonBase, SxProps, Theme } from "@mui/material";
@@ -13,7 +12,7 @@ import MiniLogo from "./MiniLogo";
 
 interface Props {
     sx?: SxProps<Theme>;
-    to?: To;
+    to?: any;
     open?: boolean;
 }
 
@@ -26,10 +25,5 @@ const LogoSection: React.FC<Props> = ({ sx, to, open }) => (
         {open ? <Logo /> : <MiniLogo />}
     </ButtonBase>
 );
-
-LogoSection.propTypes = {
-    sx: PropTypes.object,
-    to: PropTypes.string,
-};
 
 export default LogoSection;
