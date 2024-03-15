@@ -1,3 +1,0 @@
-const useAppLanguage = () => {};
-
-export { useAppLanguage };
