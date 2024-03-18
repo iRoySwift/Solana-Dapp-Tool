@@ -12,6 +12,11 @@
     "dependencies": {
         "@headlessui/react": "^1.7.18",
         "@heroicons/react": "^2.1.1",
+        "@solana/wallet-adapter-base": "^0.9.23",
+        "@solana/wallet-adapter-react": "^0.15.35",
+        "@solana/wallet-adapter-react-ui": "^0.9.35",
+        "@solana/wallet-adapter-wallets": "^0.19.32",
+        "@solana/web3.js": "^1.91.1",
         "lodash-es": "^4.17.21",
         "next": "14.1.0",
         "react": "^18",
