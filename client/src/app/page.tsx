@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import Switch from "@/components/ui/Switch";
-import Dropdown from "@/components/ui/Dropdown";
-import Button from "@/components/ui/Button/Button";
+import Switch from "@/components/headlessui/Switch";
+import Dropdown from "@/components/headlessui/Dropdown";
+import Button from "@/components/headlessui/Button/Button";
 import React from "react";
 
 export default function Home() {

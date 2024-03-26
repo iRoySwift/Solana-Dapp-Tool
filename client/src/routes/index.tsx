@@ -30,33 +30,15 @@ const dashboard: iRoute[] = [
         ],
     },
     {
-        id: "nextjs",
-        title: "NextJS",
-        group: "NextJS",
+        id: "tutorial",
+        title: "Tutorial",
+        group: "Tutorial",
         icon: <Squares2X2Icon />,
         children: [
             {
-                id: "intercepting",
-                title: "Intercepting Route",
-                url: "/photos",
-            },
-        ],
-    },
-    {
-        id: "navigation3",
-        title: "Navigation",
-        group: "Navigation",
-        icon: <Squares2X2Icon />,
-        children: [
-            {
-                id: "home3",
-                title: "Home",
-                url: "/3",
-            },
-            {
-                id: "dashboard3",
-                title: "Dashboard",
-                url: "/dashboard3",
+                id: "baseTransfer",
+                title: "Base Transfer",
+                url: "/tutorial/baseTransfer",
             },
         ],
     },

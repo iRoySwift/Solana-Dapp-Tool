@@ -1,5 +1,5 @@
 "use client";
-import { Menu } from "@/components/ui";
+import { Menu } from "@/components/headlessui";
 import { dashboard, iRoute } from "@/routes";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";

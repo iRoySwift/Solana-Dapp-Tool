@@ -3,6 +3,7 @@ import React from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import MainLayout from "@/layout/MainLayout";
+import { ThemeProvider } from "@/components/Theme/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,14 +21,20 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className="bg-th-bkg">
-                <MainLayout>
-                    <>
-                        <div id="modal-root" />
-                        {children}
-                        {modal}
-                    </>
-                </MainLayout>
+            <body>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange>
+                    <MainLayout>
+                        <>
+                            <div id="modal-root" />
+                            {children}
+                            {modal}
+                        </>
+                    </MainLayout>
+                </ThemeProvider>
             </body>
         </html>
     );
