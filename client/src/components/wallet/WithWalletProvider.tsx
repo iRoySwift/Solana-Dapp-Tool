@@ -10,22 +10,23 @@ import {
     SolflareWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { useSolanaStore } from "@/store";
 
 interface Props {
     children: React.ReactNode;
 }
 const WithWalletProvider: React.FC<Props> = ({ children }) => {
-    const network = WalletAdapterNetwork.Devnet;
-    const endpoint = clusterApiUrl(network);
+    const { clusterUrl } = useSolanaStore();
+
     const wallets = useMemo(
         () => [
-            new PhantomWalletAdapter(),
-            new SolflareWalletAdapter({ network }),
+            // new PhantomWalletAdapter(),
+            // new SolflareWalletAdapter({ network }),
         ],
-        [network]
+        []
     );
     return (
-        <ConnectionProvider endpoint={endpoint}>
+        <ConnectionProvider endpoint={clusterUrl}>
             <WalletProvider wallets={wallets} autoConnect>
                 <WalletModalProvider>{children}</WalletModalProvider>
             </WalletProvider>

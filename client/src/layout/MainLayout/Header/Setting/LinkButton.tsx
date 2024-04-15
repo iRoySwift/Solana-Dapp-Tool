@@ -11,7 +11,7 @@ const LinkButton: React.FC<Props> = props => {
     const { currentCluster, cluster, handleClick, children } = props;
     return (
         <a
-            className={`cursor-pointer rounded-md border p-2 pl-3 text-center ${cluster == currentCluster ? "border-primary bg-primary text-primary-foreground" : "border-border hover:bg-accent hover:text-accent-foreground"}`}
+            className={`h-10 cursor-pointer overflow-hidden break-all rounded-md border p-2 pl-3 text-center ${cluster == currentCluster ? "border-primary bg-primary text-primary-foreground" : "border-border hover:bg-accent hover:text-accent-foreground"}`}
             onClick={() => handleClick(cluster)}>
             {children}
         </a>

@@ -1,4 +1,4 @@
-import { isBrowser, noop } from "@/utils/utils";
+import { isBrowser, noop } from "@/utils";
 import {
     Dispatch,
     SetStateAction,
