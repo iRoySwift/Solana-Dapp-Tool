@@ -9,7 +9,7 @@ const Drawer: React.FC<Props> = ({ drawer }) => {
     return (
         <nav className="z-50">
             <div
-                className={`fixed  h-full bg-primary-foreground ${drawer ? "w-[260px] border-r border-border" : "w-[60px] shadow"}`}>
+                className={`bg-background-nav  fixed h-full ${drawer ? "w-[260px] border-r border-border" : "w-[60px] shadow"}`}>
                 <LogoSelection drawer={drawer} />
                 <Content drawer={drawer} />
             </div>

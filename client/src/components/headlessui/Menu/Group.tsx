@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import Item from "./Item";
 import { iItem, iMenu } from ".";
@@ -57,17 +56,18 @@ const Group: React.FC<Props> = props => {
     if (drawer) {
         groupSelectClass += "p-2 pl-6 pr-4 ";
         if (!hasChildren) {
-            groupSelectClass += "hover:!bg-tw-bkg-hover ";
+            groupSelectClass +=
+                "hover:!bg-accent hover:!text-accent-foreground ";
             if (isActive) {
                 groupSelectClass +=
-                    "border-r-2 border-tw-link-active bg-tw-bkg-hover text-tw-link-active ";
+                    "border-r-2 border-primary bg-accent text-accent-foreground";
             }
         }
     } else {
-        groupSelectClass += "m-2 mx-3 rounded-md hover:bg-tw-bkg-hover-2 ";
+        groupSelectClass += "m-2 mx-3 rounded-md hover:bg-accent ";
         if (isActive) {
             groupSelectClass +=
-                "text-tw-link-active bg-tw-bkg-hover hover:!bg-tw-bkg-hover ";
+                "text-accent-foreground bg-accent hover:!bg-accent ";
         }
     }
 
@@ -75,13 +75,11 @@ const Group: React.FC<Props> = props => {
         <div>
             <ul className="group">
                 {drawer && (
-                    <div className="my-3 pl-6 text-xs text-tw-fgd-3">
-                        {item.group}
-                    </div>
+                    <div className="my-3 pl-6 text-xs">{item.group}</div>
                 )}
                 {/*  */}
                 <div
-                    className={`text-tw-fgd-2 ${groupSelectClass} group-has-[.selected]:text-tw-link-active group-has-[.invisible]:hover:bg-tw-bkg-hover`}>
+                    className={` ${groupSelectClass} group-has-[.selected]:text-primary group-has-[.invisible]:hover:bg-accent`}>
                     <a
                         className="my-1 block"
                         onClick={() => handleGroupClick(item)}>

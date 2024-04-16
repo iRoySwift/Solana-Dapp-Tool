@@ -27,12 +27,11 @@ const Item: React.FC<Props> = props => {
         };
     }, [handleCollapse, item, selected]);
     return (
-        <div
-            className={`${open ? "visible" : "invisible hidden"} text-tw-fgd-2`}>
+        <div className={`${open ? "visible" : "invisible hidden"}`}>
             <ul>
                 <Link
                     href={item.url}
-                    className={`${isSelected.current && "selected"} my-1 block hover:bg-tw-bkg-hover [&.selected]:border-r-2 [&.selected]:border-tw-link-active [&.selected]:bg-tw-bkg-hover  [&.selected]:text-tw-link-active`}
+                    className={`${isSelected.current && "selected"} my-1 block hover:bg-accent [&.selected]:border-r-2 [&.selected]:border-primary [&.selected]:bg-accent  [&.selected]:text-accent-foreground`}
                     onClick={() => handleSelect(item)}>
                     <div className="flex cursor-pointer items-center justify-between p-2 pl-6 pr-4 text-sm leading-relaxed">
                         <div className="w-7"></div>
