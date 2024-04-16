@@ -29,19 +29,6 @@ const dashboard: iRoute[] = [
             },
         ],
     },
-    {
-        id: "tutorial",
-        title: "Tutorial",
-        group: "Tutorial",
-        icon: <Squares2X2Icon />,
-        children: [
-            {
-                id: "baseTransfer",
-                title: "Base Transfer",
-                url: "/tutorial/baseTransfer",
-            },
-        ],
-    },
 ];
 
 export { dashboard };
