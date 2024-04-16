@@ -1,5 +1,5 @@
 import React, { use } from "react";
-import { getTodo } from "../api/server/getTodo";
+import { getTodo } from "../../api/server/getTodo";
 
 const getData = async () => {
     // test api
