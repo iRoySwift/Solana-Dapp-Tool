@@ -4,7 +4,6 @@ import Header from "./Header";
 import Drawer from "./Drawer";
 import { useDrawerStore } from "@/store";
 import WithWalletProvider from "@/components/wallet/WithWalletProvider";
-import { Toaster } from "@/components/ui/toaster";
 
 interface Props {
     children: React.ReactNode;
@@ -15,7 +14,6 @@ const MainLayout: React.FC<Props> = props => {
 
     return (
         <WithWalletProvider>
-            <Toaster />
             <div className="flex min-h-screen w-full">
                 <Header drawer={drawer} />
                 <Drawer drawer={drawer} />

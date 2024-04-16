@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import React from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import MainLayout from "@/layout/MainLayout";
 import { ThemeProvider } from "@/components/Theme/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,13 +27,12 @@ export default function RootLayout({
                     defaultTheme="system"
                     enableSystem
                     disableTransitionOnChange>
-                    <MainLayout>
-                        <>
-                            <div id="modal-root" />
-                            {children}
-                            {modal}
-                        </>
-                    </MainLayout>
+                    <Toaster />
+                    <>
+                        <div id="modal-root" />
+                        {children}
+                        {modal}
+                    </>
                 </ThemeProvider>
             </body>
         </html>

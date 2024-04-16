@@ -1,8 +1,8 @@
 "use client";
 import { Menu } from "@/components/headlessui";
-import { dashboard, iRoute } from "@/routes";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+import { iRoute, routes } from "../../routes";
 
 interface Props {
     drawer?: boolean;
@@ -31,7 +31,7 @@ const Content: React.FC<Props> = props => {
     }, []);
 
     useEffect(() => {
-        setDefaultSelectKey((calcKey(dashboard, pathname) as any)?.id);
+        setDefaultSelectKey((calcKey(routes, pathname) as any)?.id);
     }, [calcKey, pathname]);
 
     return (
@@ -39,7 +39,7 @@ const Content: React.FC<Props> = props => {
             <Menu
                 defaultSelectKey={defaultSelectKey}
                 drawer={drawer}
-                dataSource={dashboard}></Menu>
+                dataSource={routes}></Menu>
         </div>
     );
 };
