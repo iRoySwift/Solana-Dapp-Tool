@@ -20,7 +20,7 @@ const routes: iRoute[] = [
             {
                 id: "baseTransfer",
                 title: "Base Transfer",
-                url: "/tutorial/baseTransfer",
+                url: "/baseTransfer",
             },
         ],
     },
