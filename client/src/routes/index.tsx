@@ -3,45 +3,25 @@ import { ReactNode } from "react";
 
 export type iRoute = {
     id: string;
-    title: string;
+    label: string;
+    route: string;
     icon?: ReactNode;
-    group?: string;
-    url?: string;
     children?: iRoute[];
 };
 
-const dashboard: iRoute[] = [
+const sidebarLinks: iRoute[] = [
     {
-        id: "navigation",
-        title: "Navigation",
-        group: "Navigation",
+        id: "home",
+        label: "Home",
+        route: "/",
         icon: <Squares2X2Icon />,
-        children: [
-            {
-                id: "home",
-                title: "Home",
-                url: "/",
-            },
-            {
-                id: "dashboard",
-                title: "Dashboard",
-                url: "/dashboard",
-            },
-        ],
     },
-    // {
-    //     id: "tutorial",
-    //     title: "Tutorial",
-    //     group: "Tutorial",
-    //     icon: <Squares2X2Icon />,
-    //     children: [
-    //         {
-    //             id: "baseTransfer",
-    //             title: "Base Transfer",
-    //             url: "/tutorial/baseTransfer",
-    //         },
-    //     ],
-    // },
+    {
+        id: "dashboard",
+        label: "Dashboard",
+        route: "/dashboard",
+        icon: <Squares2X2Icon />,
+    },
 ];
 
-export { dashboard };
+export { sidebarLinks };
