@@ -28,6 +28,8 @@
         --ring: 221.2 83.2% 53.3%;
         --radius: 0.5rem;
 
+        --background-nav: 0 0% 100%;
+
         --info: theme("colors.zinc.500");
         --error: theme("colors.red.500");
         --success: theme("colors.green.500");

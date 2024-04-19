@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import useCheckWallet from "@/hooks/useCheckWallet";
 import { cn } from "@/lib/utils";
 import { useSolanaStore } from "@/store";
+import { createToken, mintToken } from "@/utils/solana/mintToken";
 import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
 import { validateSolAddress } from "@/utils/solana/valid";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,11 +41,13 @@ const FormSchema = z
     });
 
 interface Props {}
-const BaseTransfer: React.FC<Props> = () => {
+const MintToken: React.FC<Props> = () => {
     const { connection } = useConnection();
     const { publicKey: pubkey, sendTransaction } = useWallet();
     const { cluster } = useSolanaStore();
-    const [balance, setBalance] = useState(0);
+    const [mint, setMint] = useState<PublicKey>();
+    let [ata, setAta] = useState<PublicKey>();
+    const [balance, setBalance] = useState<number | null>();
     const { toast } = useToast();
     const checkWallet = useCheckWallet(pubkey);
 
@@ -57,10 +60,11 @@ const BaseTransfer: React.FC<Props> = () => {
     });
     const errors = form.formState.errors;
 
-    const handleQuery = checkWallet(async () => {
+    const handleCreateToken = checkWallet(async () => {
         if (!pubkey) return;
-        let balance = await connection.getBalance(pubkey);
-        setBalance(balance / LAMPORTS_PER_SOL);
+        const mint = await createToken(connection, pubkey, sendTransaction);
+        setMint(mint);
+        console.log(`   ✅ - Token mint address: ${mint.toBase58()}`);
     });
 
     const goToSolanaExplorer = (txid?: string) => {
@@ -70,21 +74,18 @@ const BaseTransfer: React.FC<Props> = () => {
     };
     const onSubmit = checkWallet(async () => {
         if (!pubkey) return;
-        const txInstruction = [
-            SystemProgram.transfer({
-                fromPubkey: pubkey,
-                toPubkey: new PublicKey(form.getValues().toPubkey),
-                lamports: form.getValues().count * LAMPORTS_PER_SOL,
-            }),
-        ];
-        const txid = await createAndSendV0TxByWallet(
-            pubkey,
+        if (!mint) return;
+        const { ata, txid } = await mintToken(
             connection,
-            sendTransaction,
-            txInstruction
+            pubkey,
+            mint,
+            new PublicKey(form.getValues().toPubkey),
+            form.getValues().count * LAMPORTS_PER_SOL,
+            sendTransaction
         );
+        setAta(ata);
         toast({
-            title: " Transaction succesfully confirmed!",
+            title: "Transaction succesfully confirmed!",
             description: `Transaction:${txid}`,
             variant: "success",
             action: (
@@ -96,19 +97,29 @@ const BaseTransfer: React.FC<Props> = () => {
             ),
         });
     });
+
+    const handleQuery = async () => {
+        if (!ata)
+            return toast({
+                title: "Unable to obtain ATA account for Token!",
+                variant: "warning",
+            });
+        let balance = await connection.getTokenAccountBalance(ata);
+        setBalance(balance.value.uiAmount);
+    };
     return (
         <div className="p-4">
             <div className="flex flex-col items-center justify-center gap-2">
                 <h2 className="border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-                    Transfer Solana
+                    Mint Token
                 </h2>
                 <section className="mt-10 flex flex-col gap-5">
-                    <div>
-                        Balance:{balance}
-                        <Button className="ml-2" onClick={handleQuery}>
-                            Query
-                        </Button>
-                    </div>
+                    <a
+                        className="cursor-pointer text-primary"
+                        onClick={handleCreateToken}>
+                        Create Token
+                    </a>
+                    <div>Token address:{mint?.toBase58()}</div>
                     <Form {...form}>
                         <form
                             className="flex gap-2"
@@ -143,7 +154,7 @@ const BaseTransfer: React.FC<Props> = () => {
                                                 "w-20  focus-visible:ring-offset-0",
                                                 {
                                                     "border-destructive placeholder:text-destructive focus-visible:ring-destructive":
-                                                        errors.toPubkey,
+                                                        errors.count,
                                                 }
                                             )}
                                             type="number"
@@ -158,9 +169,13 @@ const BaseTransfer: React.FC<Props> = () => {
                             <Button type="submit">Transfer</Button>
                         </form>
                     </Form>
+                    <div className="flex items-center gap-5">
+                        <span>Token balance:{balance}</span>
+                        <Button onClick={handleQuery}>Query Token</Button>
+                    </div>
                 </section>
             </div>
         </div>
     );
 };
-export default BaseTransfer;
+export default MintToken;

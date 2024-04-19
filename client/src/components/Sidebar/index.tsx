@@ -9,14 +9,14 @@ interface Props {}
 const SideBar: React.FC<Props> = () => {
     const pathname = usePathname();
     return (
-        <div className="h-screen w-fit bg-background-nav  p-6 max-sm:hidden lg:w-[264px]">
+        <div className="h-screen w-fit bg-background-nav p-6  text-white max-sm:hidden lg:w-[264px]">
             <div className="flex flex-col gap-6">
                 {sidebarLinks.map(link => {
                     const isActive = pathname === link.route;
                     return (
                         <Link
                             className={cn(
-                                "flex items-center gap-4 rounded-lg p-4",
+                                "flex items-center justify-start gap-4 rounded-lg p-4",
                                 {
                                     "bg-primary": isActive,
                                 }
