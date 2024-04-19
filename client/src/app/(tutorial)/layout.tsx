@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
-import MainLayout from "@/app/(root)/(tutorial)/MainLayout";
+import MainLayout from "@/app/(tutorial)/MainLayout";
 
 export const metadata: Metadata = {
     title: "Solana Tutorial",
