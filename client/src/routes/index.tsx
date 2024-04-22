@@ -16,12 +16,6 @@ const sidebarLinks: iRoute[] = [
         route: "/",
         icon: <Squares2X2Icon />,
     },
-    {
-        id: "dashboard",
-        label: "Dashboard",
-        route: "/dashboard",
-        icon: <Squares2X2Icon />,
-    },
 ];
 
 export { sidebarLinks };

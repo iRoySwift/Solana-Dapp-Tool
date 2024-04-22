@@ -11,8 +11,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Locale, useI18n } from "@/i18n";
-import { getDictionary } from "@/i18n/dictionaries";
+import { useI18n } from "@/i18n";
 
 interface Props {}
 

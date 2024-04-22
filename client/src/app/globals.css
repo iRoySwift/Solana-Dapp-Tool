@@ -4,15 +4,12 @@
 
 @layer base {
     :root {
-        --foreground: 228 25.42% 11.57%;
-        --card-foreground: 228 25.42% 11.57%;
-        --popover-foreground: 228 25.42% 11.57%;
         --background: 0 0% 100%;
-        /* --foreground: 222.2 84% 4.9%; */
+        --foreground: 228 25.42% 11.57%;
         --card: 0 0% 100%;
-        /* --card-foreground: 222.2 84% 4.9%; */
+        --card-foreground: 228 25.42% 11.57%;
         --popover: 0 0% 100%;
-        /* --popover-foreground: 222.2 84% 4.9%; */
+        --popover-foreground: 228 25.42% 11.57%;
         --primary: 221.2 83.2% 53.3%;
         --primary-foreground: 210 40% 98%;
         --secondary: 210 40% 96.1%;
@@ -38,13 +35,10 @@
 
     .dark {
         --background: 228 25.42% 11.57%;
-        --card: 228 25.42% 11.57%;
-        --popover: 228 25.42% 11.57%;
-        /* --background: 222.2 84% 4.9%; */
         --foreground: 210 40% 98%;
-        /* --card: 222.2 84% 4.9%; */
+        --card: 230 24.32% 14.51%;
         --card-foreground: 210 40% 98%;
-        /* --popover: 222.2 84% 4.9%; */
+        --popover: 230 24.32% 14.51%;
         --popover-foreground: 210 40% 98%;
         --primary: 217.2 91.2% 59.8%;
         --primary-foreground: 222.2 47.4% 11.2%;
@@ -70,12 +64,18 @@
 }
 
 @layer base {
-    /* * {
+    * {
         @apply border-border;
-    } */
+    }
     body {
         @apply bg-background text-foreground;
     }
+}
+
+@layer components {
+    /* card {
+        @apply bg-card;
+    } */
 }
 
 @layer utilities {
