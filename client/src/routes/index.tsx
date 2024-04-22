@@ -2,7 +2,7 @@ import { Squares2X2Icon } from "@heroicons/react/16/solid";
 import { ReactNode } from "react";
 
 export type iRoute = {
-    id: string;
+    id: any;
     label: string;
     route: string;
     icon?: ReactNode;

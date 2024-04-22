@@ -5,7 +5,8 @@ import React from "react";
 interface Props {
     children: React.ReactNode;
 }
-const HomeLayout: React.FC<Props> = ({ children }) => {
+const HomeLayout: React.FC<Props> = props => {
+    const { children } = props;
     return (
         <main className="relative">
             <Navbar />

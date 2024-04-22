@@ -1,18 +1,26 @@
 "use client";
+import useLocaleRoute from "@/hooks/useLocaleRoute";
+import { useI18n } from "@/i18n";
 import { cn } from "@/lib/utils";
 import { sidebarLinks } from "@/routes";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import React from "react";
 
 interface Props {}
 const SideBar: React.FC<Props> = () => {
     const pathname = usePathname();
+    const params = useParams();
+    const t = useI18n();
+    const localeLink = useLocaleRoute();
     return (
         <div className="h-screen w-fit bg-background-nav p-6  text-white max-sm:hidden lg:w-[264px]">
             <div className="flex flex-col gap-6">
                 {sidebarLinks.map(link => {
-                    const isActive = pathname === link.route;
+                    const isActive =
+                        pathname
+                            .replace(`/${params.lang}`, "/")
+                            .replace("//", "/") == link.route;
                     return (
                         <Link
                             className={cn(
@@ -22,10 +30,10 @@ const SideBar: React.FC<Props> = () => {
                                 }
                             )}
                             key={link.id}
-                            href={link.route}>
+                            href={localeLink(link.route)}>
                             <div className="flex h-6 w-6">{link.icon}</div>
                             <p className="text-lg font-semibold max-lg:hidden">
-                                {link.label}
+                                {t(link.id)}
                             </p>
                         </Link>
                     );
