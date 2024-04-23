@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/Theme/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { i18n, Locale } from "@/i18n";
+import WithWalletProvider from "@/components/wallet/WithWalletProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,18 +30,20 @@ export default function RootLayout({
     return (
         <html lang={params.lang}>
             <body>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange>
-                    <Toaster />
-                    <>
-                        <div id="modal-root" />
-                        {children}
-                        {modal}
-                    </>
-                </ThemeProvider>
+                <WithWalletProvider>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange>
+                        <Toaster />
+                        <>
+                            <div id="modal-root" />
+                            {children}
+                            {modal}
+                        </>
+                    </ThemeProvider>
+                </WithWalletProvider>
             </body>
         </html>
     );

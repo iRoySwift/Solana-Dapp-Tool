@@ -5,7 +5,7 @@ import {
     ChevronDoubleRightIcon,
 } from "@heroicons/react/20/solid";
 import { useDrawerStore } from "@/store";
-import { ModeToggle } from "@/components/Theme/ModeToggle";
+import ModeToggle from "@/components/Theme/ModeToggle";
 import Wallet from "@/components/wallet/Wallet";
 import { Button } from "@/components/ui/button";
 import Setting from "./Setting";
