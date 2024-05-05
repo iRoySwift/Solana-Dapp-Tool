@@ -1,3 +1,3 @@
 export type Todo = {
-    title: string;
+  title: string;
 };

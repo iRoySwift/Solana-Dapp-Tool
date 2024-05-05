@@ -1,10 +1,10 @@
-import React from "react";
-import { Modal } from "./modal";
+import React from 'react';
+import { Modal } from './modal';
 
 export default function PhotoModal({
-    params: { id: photoId },
+  params: { id: photoId },
 }: {
-    params: { id: string };
+  params: { id: string };
 }) {
-    return <Modal>{photoId}</Modal>;
+  return <Modal>{photoId}</Modal>;
 }
