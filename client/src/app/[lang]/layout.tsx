@@ -8,11 +8,11 @@ interface Props {
 const HomeLayout: React.FC<Props> = props => {
     const { children } = props;
     return (
-        <main className="relative">
+        <main className="relative flex h-screen flex-col">
             <Navbar />
-            <div className="flex">
+            <div className="flex flex-1">
                 <SideBar />
-                <section className="min-h-screen w-full flex-1 p-6  max-md:pb-14 sm:px-14">
+                <section className="h-[calc(100vh-100px)] w-full overflow-auto p-6  max-md:pb-14 sm:px-14">
                     {children}
                 </section>
             </div>

@@ -14,7 +14,7 @@ const SideBar: React.FC<Props> = () => {
     const t = useI18n();
     const localeLink = useLocaleRoute();
     return (
-        <div className="h-screen w-fit bg-background p-6  text-white max-sm:hidden lg:w-[264px]">
+        <div className="h-[calc(100vh-80px)] w-fit overflow-auto bg-background p-6  text-white max-sm:hidden lg:w-[264px]">
             <div className="flex flex-col gap-6">
                 {sidebarLinks.map(link => {
                     const isActive =
