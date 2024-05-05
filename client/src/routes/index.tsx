@@ -2,7 +2,7 @@ import { Squares2X2Icon } from "@heroicons/react/16/solid";
 import { ReactNode } from "react";
 
 export type iRoute = {
-    id: string;
+    id: any;
     label: string;
     route: string;
     icon?: ReactNode;
@@ -14,12 +14,6 @@ const sidebarLinks: iRoute[] = [
         id: "home",
         label: "Home",
         route: "/",
-        icon: <Squares2X2Icon />,
-    },
-    {
-        id: "dashboard",
-        label: "Dashboard",
-        route: "/dashboard",
         icon: <Squares2X2Icon />,
     },
 ];

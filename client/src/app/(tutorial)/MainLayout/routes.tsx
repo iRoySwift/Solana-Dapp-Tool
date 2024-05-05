@@ -22,6 +22,11 @@ const routes: iRoute[] = [
                 title: "Base Transfer",
                 url: "/baseTransfer",
             },
+            {
+                id: "mintToken",
+                title: "Mint Token",
+                url: "/mintToken",
+            },
         ],
     },
 ];

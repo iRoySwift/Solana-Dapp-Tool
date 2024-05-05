@@ -10,6 +10,7 @@
         "format": "prettier --write \"**/*.{js,ts,json,jsx,tsx,css,less,scss,vue,html}\""
     },
     "dependencies": {
+        "@formatjs/intl-localematcher": "^0.5.4",
         "@headlessui/react": "^1.7.18",
         "@heroicons/react": "^2.1.1",
         "@hookform/resolvers": "^3.3.4",
@@ -28,6 +29,7 @@
         "@radix-ui/react-tabs": "^1.0.4",
         "@radix-ui/react-toast": "^1.1.5",
         "@radix-ui/react-toggle": "^1.0.3",
+        "@solana/spl-token": "^0.4.3",
         "@solana/wallet-adapter-base": "^0.9.23",
         "@solana/wallet-adapter-react": "^0.15.35",
         "@solana/wallet-adapter-react-ui": "^0.9.35",
@@ -37,6 +39,7 @@
         "clsx": "^2.1.0",
         "lodash-es": "^4.17.21",
         "lucide-react": "^0.360.0",
+        "negotiator": "^0.6.3",
         "next": "14.1.0",
         "next-themes": "^0.3.0",
         "pino-pretty": "^11.0.0",
@@ -52,6 +55,7 @@
     },
     "devDependencies": {
         "@types/lodash-es": "^4.17.12",
+        "@types/negotiator": "^0.6.3",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",

@@ -10,12 +10,17 @@ import {
 import Link from "next/link";
 import { sidebarLinks } from "@/routes";
 import Logo from "../Logo/Logo";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import useLocaleRoute from "@/hooks/useLocaleRoute";
+import { useI18n } from "@/i18n";
 
 interface Props {}
 const MobileNav: React.FC<Props> = () => {
     const pathname = usePathname();
+    const params = useParams();
+    const localeLink = useLocaleRoute();
+    const t = useI18n();
 
     return (
         <section className="flex-center">
@@ -25,19 +30,20 @@ const MobileNav: React.FC<Props> = () => {
                         <AlignJustify size={32} strokeWidth={2} />
                     </div>
                 </SheetTrigger>
-                <SheetContent
-                    side="left"
-                    className="border-none bg-background-nav">
+                <SheetContent side="left" className="border-none bg-background">
                     <div className="flex flex-col ">
                         <Link href="/">
                             <Logo />
                         </Link>
                         <div className="h-[calc(100vh-20px)] overflow-y-scroll">
                             <SheetClose asChild>
-                                <div className="flex h-full flex-col gap-6 pt-16">
+                                <div className="flex h-full flex-col gap-6 pt-16 text-white">
                                     {sidebarLinks.map(link => {
                                         const isActive =
-                                            pathname === link.route;
+                                            pathname
+                                                .replace(`/${params.lang}`, "/")
+                                                .replace("//", "/") ==
+                                            link.route;
                                         return (
                                             <Link
                                                 className={cn(
@@ -47,12 +53,12 @@ const MobileNav: React.FC<Props> = () => {
                                                     }
                                                 )}
                                                 key={link.id}
-                                                href={link.route}>
+                                                href={localeLink(link.route)}>
                                                 <div className="flex h-6 w-6">
                                                     {link.icon}
                                                 </div>
                                                 <p className="text-lg font-semibold ">
-                                                    {link.label}
+                                                    {t(link.id)}
                                                 </p>
                                             </Link>
                                         );
