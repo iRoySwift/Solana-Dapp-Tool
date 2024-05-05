@@ -12,7 +12,7 @@ interface Props {}
 const Navbar: React.FC<Props> = props => {
     const { lang } = useParams();
     return (
-        <div className="flex-between  bg-background-nav px-6 py-4">
+        <div className="flex-between bg-background px-6 py-4">
             <Link href={`/${lang}`}>
                 <div className="max-sm:hidden">
                     <Logo />

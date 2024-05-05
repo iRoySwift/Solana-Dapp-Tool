@@ -30,16 +30,14 @@ const MobileNav: React.FC<Props> = () => {
                         <AlignJustify size={32} strokeWidth={2} />
                     </div>
                 </SheetTrigger>
-                <SheetContent
-                    side="left"
-                    className="border-none bg-background-nav">
+                <SheetContent side="left" className="border-none bg-background">
                     <div className="flex flex-col ">
                         <Link href="/">
                             <Logo />
                         </Link>
                         <div className="h-[calc(100vh-20px)] overflow-y-scroll">
                             <SheetClose asChild>
-                                <div className="flex h-full flex-col gap-6 pt-16">
+                                <div className="flex h-full flex-col gap-6 pt-16 text-white">
                                     {sidebarLinks.map(link => {
                                         const isActive =
                                             pathname

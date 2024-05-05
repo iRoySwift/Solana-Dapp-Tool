@@ -30,7 +30,7 @@ const config = {
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",
                 background: "hsl(var(--background))",
-                "background-nav": "hsl(var(--background-nav))",
+                "bkg-1": "hsl(var(--bkg-1))",
                 foreground: "hsl(var(--foreground))",
                 primary: {
                     DEFAULT: "hsl(var(--primary))",

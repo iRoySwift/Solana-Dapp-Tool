@@ -12,7 +12,7 @@ const HomeLayout: React.FC<Props> = props => {
             <Navbar />
             <div className="flex">
                 <SideBar />
-                <section className="min-h-screen w-full flex-1 p-6 max-md:pb-14  sm:px-14">
+                <section className="min-h-screen w-full flex-1 p-6  max-md:pb-14 sm:px-14">
                     {children}
                 </section>
             </div>

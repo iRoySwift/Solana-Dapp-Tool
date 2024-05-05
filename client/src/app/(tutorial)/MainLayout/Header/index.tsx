@@ -17,7 +17,7 @@ const Header: React.FC<Props> = ({ drawer }) => {
     const { openDrawer, closeDrawer } = useDrawerStore();
     return (
         <header
-            className={`fixed z-50 flex h-[60px] border-b bg-background-nav  ${drawer ? "left-[260px] w-[calc(100%-260px)]" : "left-[60px] w-[calc(100%-60px)]"}`}>
+            className={`fixed z-50 flex h-[60px] border-b bg-background  ${drawer ? "left-[260px] w-[calc(100%-260px)]" : "left-[60px] w-[calc(100%-60px)]"}`}>
             <div className="flex w-full items-center justify-between p-2">
                 <div>
                     <Button variant="outline" size="icon">
