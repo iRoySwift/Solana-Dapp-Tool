@@ -1,12 +1,27 @@
+'use client';
 import Navbar from '@/components/Navbar';
 import SideBar from '@/components/Sidebar';
-import React from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
+import React, { useEffect } from 'react';
 
 interface Props {
   children: React.ReactNode;
 }
 const HomeLayout: React.FC<Props> = (props) => {
   const { children } = props;
+  const { publicKey: pubkey } = useWallet();
+  useEffect(() => {
+    console.log('🚀 ~ pubkey:', pubkey);
+    if (!pubkey) return;
+    fetch('http://localhost:3000')
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [pubkey]);
   return (
     <main className="relative flex h-screen flex-col">
       <Navbar />
