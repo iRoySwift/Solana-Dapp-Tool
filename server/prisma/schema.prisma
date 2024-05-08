@@ -26,7 +26,7 @@ model log_login {
   updatedAt DateTime @updatedAt
 }
 
-model auth_user {
+model auth_users {
   id Int @default(autoincrement()) @id
   username String @unique
   password String
