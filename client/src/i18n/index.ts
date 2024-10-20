@@ -1,3 +1,4 @@
+"use client";
 import { useParams } from "next/navigation";
 import { i18n } from "./config";
 import en from "./locales/en.json";

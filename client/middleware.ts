@@ -5,12 +5,11 @@ import { match } from "@formatjs/intl-localematcher";
 let locales = ["en"];
 
 function getLocale(request: NextRequest): string | undefined {
-    let headers = { "accept-language": "en-US,en;q=0.5" };
+    let headers = { "accept-language": "en;q=0.5" };
     let languages = new Negotiator({ headers }).languages();
-    let locales = ["en"];
     let defaultLocale = "en";
 
-    const locale = match(languages, locales, defaultLocale); // -> 'en-US'
+    const locale = match(languages, locales, defaultLocale); // -> 'en'
     return locale;
 }
 

@@ -1,4 +1,3 @@
-import { Locale } from "@/i18n";
 import "server-only";
 
 export const dictionaries = {
@@ -6,5 +5,5 @@ export const dictionaries = {
     zh: () => import("@/i18n/locales/zh.json").then(module => module.default),
 };
 
-export const getDictionary = async (locale: Locale) =>
-    dictionaries[locale]?.() ?? dictionaries.en();
+export const getDictionary = async (locale: "en" | "zh") =>
+    dictionaries[locale]();

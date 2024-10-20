@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import React from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/Theme/theme-provider";
+import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
-import { i18n, Locale } from "@/i18n";
 import WithWalletProvider from "@/components/wallet/WithWalletProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export async function generateStaticParams() {
-    return i18n.locales.map(locale => ({ lang: locale }));
+    return [{ lang: "en" }, { lang: "zh" }];
 }
 
 export default function RootLayout({
@@ -25,17 +24,13 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
     modal: React.ReactNode;
-    params: { lang: Locale };
+    params: { lang: string };
 }>) {
     return (
-        <html lang={params.lang}>
+        <html lang={params.lang} suppressHydrationWarning={true}>
             <body>
                 <WithWalletProvider>
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="system"
-                        enableSystem
-                        disableTransitionOnChange>
+                    <ThemeProvider>
                         <Toaster />
                         <>
                             <div id="modal-root" />
