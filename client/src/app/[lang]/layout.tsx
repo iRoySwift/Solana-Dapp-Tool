@@ -7,6 +7,7 @@ interface Props {
 }
 const HomeLayout: React.FC<Props> = props => {
     const { children } = props;
+
     return (
         <main className="relative flex h-screen flex-col">
             <Navbar />

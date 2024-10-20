@@ -23,12 +23,14 @@ import { Button } from "@/components/ui/button";
 import { EllipsisVertical } from "lucide-react";
 import { iToken } from ".";
 import { Card } from "@/components/ui/card";
+import SkeletonTableRow from "./SkeletonTableRow";
 
 interface Props {
     tokens: iToken[];
+    isLoading: boolean;
 }
 const List: React.FC<Props> = props => {
-    const { tokens } = props;
+    const { tokens, isLoading } = props;
     const t = useI18n();
     return (
         <Card className="p-6 max-sm:hidden">
@@ -48,73 +50,79 @@ const List: React.FC<Props> = props => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {tokens.map(token => (
-                        <TableRow
-                            key={token.symbol}
-                            className="group border-border">
-                            <TableCell className="font-medium">
-                                <div className="flex flex-row items-center gap-2">
-                                    <div className="overflow-hidden rounded-full">
-                                        <Image
-                                            src={token.imageUri}
-                                            width={40}
-                                            height={40}
-                                            alt="Logo"
+                    {isLoading ? (
+                        <SkeletonTableRow />
+                    ) : (
+                        tokens.map(token => (
+                            <TableRow
+                                key={token.symbol}
+                                className="group border-border">
+                                <TableCell className="font-medium">
+                                    <div className="flex flex-row items-center gap-2">
+                                        <div className="overflow-hidden rounded-full">
+                                            <Image
+                                                src={token.imageUri}
+                                                width={40}
+                                                height={40}
+                                                alt="Logo"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <div>{token.name}</div>
+                                            <div className="text-slate-400">
+                                                {token.symbol}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-2">
+                                        {token.price.price}
+                                        <PriceChange
+                                            percent={token.price.change}
                                         />
                                     </div>
-                                    <div className="flex flex-col">
-                                        <div>{token.name}</div>
-                                        <div className="text-slate-400">
-                                            {token.symbol}
+                                </TableCell>
+                                <TableCell>
+                                    {token.price.price * token.totalUiAmount}
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex items-center justify-between gap-4">
+                                        <div className="flex flex-1 items-center justify-between">
+                                            {token.totalUiAmount}
+                                            <div className="hidden flex-row gap-2 group-hover:flex">
+                                                <Button>Swap</Button>
+                                                <Button>Send</Button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button
+                                                        className="rounded-full focus-visible:ring-0 focus-visible:ring-offset-0"
+                                                        variant="ghost"
+                                                        size="icon">
+                                                        <EllipsisVertical />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent className="w-56">
+                                                    <DropdownMenuItem>
+                                                        Buy
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem>
+                                                        Stake
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem>
+                                                        View in Explore
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
                                     </div>
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex gap-2">
-                                    {token.price.price}
-                                    <PriceChange percent={token.price.change} />
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                {token.price.price * token.totalUiAmount}
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex items-center justify-between gap-4">
-                                    <div className="flex flex-1 items-center justify-between">
-                                        {token.totalUiAmount}
-                                        <div className="hidden flex-row gap-2 group-hover:flex">
-                                            <Button>Swap</Button>
-                                            <Button>Send</Button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    className="rounded-full focus-visible:ring-0 focus-visible:ring-offset-0"
-                                                    variant="ghost"
-                                                    size="icon">
-                                                    <EllipsisVertical />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent className="w-56">
-                                                <DropdownMenuItem>
-                                                    Buy
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem>
-                                                    Stake
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem>
-                                                    View in Explore
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </Card>

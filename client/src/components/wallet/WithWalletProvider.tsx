@@ -18,6 +18,7 @@ interface Props {
 }
 const WithWalletProvider: React.FC<Props> = ({ children }) => {
     const { clusterUrl } = useSolanaStore();
+    console.log("🚀 ~ clusterUrl:", clusterUrl);
 
     const wallets = useMemo(
         () => [

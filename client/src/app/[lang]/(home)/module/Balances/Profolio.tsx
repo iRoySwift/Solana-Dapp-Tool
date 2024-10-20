@@ -1,24 +1,35 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Copy, QrCode } from "lucide-react";
 import React from "react";
 
-interface Props {}
-const Profolio: React.FC<Props> = () => {
+interface Props {
+    isLoading: boolean;
+}
+const Profolio: React.FC<Props> = ({ isLoading }) => {
     return (
         <Card className="max-sm:hidden">
             <div className="flex flex-row items-center justify-between p-6 ">
                 <div className="flex flex-row gap-5">
                     <div className="flex  flex-row gap-2">
-                        <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-red-200 text-2xl">
-                            H
-                        </div>
+                        {isLoading ? (
+                            <Skeleton className="h-10 w-10 rounded-full" />
+                        ) : (
+                            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-red-200 text-2xl">
+                                H
+                            </div>
+                        )}
                         <div>
                             <div className="text-xs text-slate-400">
                                 Total portfolio value
                             </div>
-                            <div className="text-xl">$100</div>
+                            {isLoading ? (
+                                <Skeleton className="h-4 w-[250px]" />
+                            ) : (
+                                <div className="text-xl">$100</div>
+                            )}
                         </div>
                     </div>
                     <Separator className="h-auto" orientation="vertical" />

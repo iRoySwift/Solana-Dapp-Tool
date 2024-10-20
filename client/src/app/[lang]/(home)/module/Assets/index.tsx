@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import List from "./List";
 import MobileList from "./MobileList";
 import { Card } from "@/components/ui/card";
@@ -100,10 +100,11 @@ const tokens = [
 
 interface Props {}
 const Assets: React.FC<Props> = () => {
+    const [isLoading, setIsLoading] = useState(false);
     return (
         <>
-            <List tokens={tokens} />
-            <MobileList tokens={tokens} />
+            <List tokens={tokens} isLoading={isLoading} />
+            <MobileList tokens={tokens} isLoading={isLoading} />
         </>
     );
 };

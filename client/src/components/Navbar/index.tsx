@@ -7,6 +7,7 @@ import MiniLogo from "../Logo/MiniLogo";
 import MobileNav from "./MobileNav";
 import { useParams } from "next/navigation";
 import Wallet from "@/components/wallet/Wallet";
+import Setting from "./Setting";
 
 interface Props {}
 const Navbar: React.FC<Props> = props => {
@@ -23,6 +24,7 @@ const Navbar: React.FC<Props> = props => {
             </Link>
             <div className="flex-between gap-5">
                 <ModeToggle />
+                <Setting />
                 <Wallet />
                 <MobileNav />
             </div>
