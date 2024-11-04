@@ -11,6 +11,7 @@ interface Props {
 }
 const ClusterRadio: React.FC<Props> = props => {
     const { currentCluster, cluster, handleClick, children } = props;
+    const a = (a: string) => {};
     return (
         <div
             className={`flex cursor-pointer items-center justify-between rounded-md p-2 py-3 ${cluster == currentCluster ? "border-primary bg-primary text-primary-foreground" : "border-border hover:bg-accent hover:text-accent-foreground"}`}>
