@@ -19,7 +19,7 @@ interface Props {
 const WithWalletProvider: React.FC<Props> = ({ children }) => {
     const { clusterUrl } = useSolanaStore();
     console.log("🚀 ~ clusterUrl:", clusterUrl);
-
+    // !TODO: ss
     const wallets = useMemo(
         () => [
             // new PhantomWalletAdapter(),

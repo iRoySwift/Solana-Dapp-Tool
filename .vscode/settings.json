@@ -1,0 +1,9 @@
+{
+    "editor.indentSize": "tabSize",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "files.autoSave": "onFocusChange",
+    "files.autoSaveDelay": 500,
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+}
