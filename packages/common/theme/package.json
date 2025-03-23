@@ -1,0 +1,25 @@
+{
+  "name": "@iroy/theme",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "exports": {
+    ".": "./src/index.ts",
+    "./index.css": "./src/index.css",
+    "./constants": "./src/constants/index.ts",
+    "./colors": "./src/colors/index.ts"
+  },
+  "devDependencies": {
+    "tailwindcss": "catalog:",
+    "tailwindcss-animate": "catalog:"
+  },
+  "dependencies": {
+    "next-themes": "catalog:"
+  }
+}

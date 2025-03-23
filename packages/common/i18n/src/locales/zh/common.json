@@ -1,0 +1,13 @@
+{
+  "light": "亮",
+  "dark": "暗",
+  "system": "系统",
+  "assets": "资产",
+  "playground": "沙盒",
+  "demo": "演示",
+  "platform": "平台",
+  "search": "搜索",
+  "zh": "中文",
+  "en": "英语",
+  "toggle_theme": "切换主题"
+}

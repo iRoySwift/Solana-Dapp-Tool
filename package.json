@@ -1,0 +1,36 @@
+{
+  "name": "@iroy/solana_tools",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "pnpm -r exec rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@iroy/eslint": "workspace:^",
+    "@iroy/typescript": "workspace:^",
+    "@types/node": "catalog:",
+    "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
+  },
+  "packageManager": "pnpm@9.12.3",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@iroy/i18n": "workspace:^",
+    "@iroy/theme": "workspace:^",
+    "@iroy/utils": "workspace:^",
+    "@iroy/hooks": "workspace:^",
+    "@iroy/ui": "workspace:^",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "zustand": "catalog:"
+  }
+}

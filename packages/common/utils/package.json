@@ -1,0 +1,22 @@
+{
+  "name": "@iroy/utils",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "date-fns": "catalog:",
+    "lodash-es": "catalog:"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "catalog:"
+  },
+  "exports": {
+    "./common": "./src/common.ts",
+    "./date-fns": "./src/date-fns.ts",
+    "./lodash-es": "./src/lodash-es.ts",
+    "./typing": "./src/typing.d.ts"
+  }
+}

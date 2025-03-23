@@ -1,0 +1,13 @@
+{
+  "light": "Light",
+  "dark": "Dark",
+  "system": "System",
+  "assets": "Assets",
+  "playground": "Playground",
+  "demo": "Demo",
+  "platform": "Platform",
+  "search": "Search",
+  "zh": "Chinese",
+  "en": "English",
+  "toggle_theme": "Toggle theme"
+}

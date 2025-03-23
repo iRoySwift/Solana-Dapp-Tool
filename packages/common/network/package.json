@@ -1,0 +1,23 @@
+{
+  "name": "@iroy/network",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "catalog:",
+    "file-saver": "catalog:",
+    "js-cookie": "catalog:",
+    "qs": "catalog:"
+  },
+  "devDependencies": {
+    "@types/file-saver": "catalog:",
+    "@types/js-cookie": "catalog:",
+    "@types/qs": "catalog:"
+  },
+  "exports": {
+    "./axios": "./src/axios/index.ts"
+  }
+}

@@ -1,0 +1,17 @@
+@import "@iroy/ui/globals";
+@import "@iroy/theme/index.css";
+@import "./mdx.css";
+
+@layer utilities {
+  .border-grid {
+    @apply border-border/50 dark:border-border border-dashed;
+  }
+
+  .container-wrapper {
+    @apply dark:border-border mx-auto w-full max-w-[1400px] border-dashed min-[1400px]:border-x min-[1800px]:max-w-screen-2xl;
+  }
+
+  .container {
+    @apply mx-auto flex max-w-screen-2xl px-4 xl:px-6;
+  }
+}

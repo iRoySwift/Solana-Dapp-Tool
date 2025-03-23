@@ -1,0 +1,14 @@
+{
+  "name": "@iroy/eslint",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./next": "./next.ts"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-next": "catalog:"
+  }
+}

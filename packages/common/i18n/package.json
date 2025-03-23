@@ -1,0 +1,17 @@
+{
+  "name": "@iroy/i18n",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./config": "./src/config.ts",
+    "./loadLocale": "./src/load-locales.ts",
+    "./store": "./src/store/index.ts",
+    "./typing": "./src/typing.d.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}

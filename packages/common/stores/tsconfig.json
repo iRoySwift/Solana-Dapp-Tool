@@ -1,0 +1,8 @@
+{
+  "extends": "@iroy/typescript/next",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": ["."],
+  "exclude": ["node_modules"]
+}
