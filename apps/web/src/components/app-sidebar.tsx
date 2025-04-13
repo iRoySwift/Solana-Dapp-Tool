@@ -1,5 +1,4 @@
 "use client";
-
 import {
   AudioWaveform,
   BookOpen,
@@ -101,6 +100,11 @@ const data: Data = {
           title: "Demo",
           key: "common.demo",
           url: "/demo",
+        },
+        {
+          title: "Example",
+          key: "common.example",
+          url: "/example",
         },
       ],
     },

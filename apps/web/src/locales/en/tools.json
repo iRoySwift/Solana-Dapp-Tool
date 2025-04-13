@@ -1,0 +1,23 @@
+{
+  "address-is-invalid": "address is invalid",
+  "address-is-not-in-the-correct-format": "address is not in the correct format",
+  "address-is-required": "address is required",
+  "airdrop": "Airdrop",
+  "airdrop-failed": "Airdrop failed",
+  "airdrop-success": "Airdrop success",
+  "current-wallet-address": "Current wallet address",
+  "not-connected": "Not Connected",
+  "please-connect-your-wallet": "Please connect your wallet",
+  "receive-wallet-address": "Receive wallet address",
+  "receive-wallet-address-desc": "The recipient's address must be a valid Solana address",
+  "sol-balance": "SOL Balance",
+  "solana-desc": "Solana ecosystem tool set, including functions such as transferring SOL to other addresses, checking SOL balance, and checking transaction records",
+  "solana-tools": "Solana Tools",
+  "transfer-quantity": "Transfer quantity",
+  "transfer-quantity-is-required": "Quantity is required",
+  "transfer-quantity-must-be-greater-than-0": "transfer quantity must be greater than 0",
+  "transfer-sol": "Transfer SOL",
+  "transfer-sol-desc": "To transfer SOL to another address, it is necessary to connect the wallet, check the balance, and request AirDrop functions",
+  "transfer-sol-to-other-address": "Transfer SOL to other address",
+  "you-submitted-the-following-values": "You submitted the following values"
+}
