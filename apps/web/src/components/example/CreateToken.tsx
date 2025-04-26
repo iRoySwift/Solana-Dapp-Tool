@@ -4,8 +4,6 @@ import {
   createTokenInstructions,
 } from "@/utils/solana/mintToken";
 import { useForm } from "@iroy/hooks/react-hook-form";
-import { getI18n } from "@iroy/i18n";
-import { Lang } from "@iroy/i18n/config";
 import { useI18nStore } from "@iroy/i18n/store";
 import { toast } from "@iroy/ui";
 import { Button } from "@iroy/ui/components/button";
@@ -29,17 +27,10 @@ import { Input } from "@iroy/ui/components/input";
 import { Label } from "@iroy/ui/components/label";
 import { z, zodResolver } from "@iroy/ui/zod";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import {
-  LAMPORTS_PER_SOL,
-  PublicKey,
-  Keypair,
-  ComputeBudgetProgram,
-  Transaction,
-} from "@solana/web3.js";
+import { PublicKey, Keypair } from "@solana/web3.js";
 import React, { useState } from "react";
 import WalletButton from "../wallet/WalletButton";
 import { Wallet as WalletIcon } from "@iroy/ui/icons";
-import { validateSolAddress } from "@/utils/solana/valid";
 import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 
@@ -168,7 +159,9 @@ const CreateToken: React.FC<Props> = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{$t("tools.create-token")}</CardTitle>
+        <CardTitle className="bg-gradient-to-tr from-[#9945FF] to-[#14F195] bg-clip-text text-transparent">
+          {$t("tools.create-token")}
+        </CardTitle>
         <CardDescription>{$t("tools.create-token-desc")}</CardDescription>
       </CardHeader>
       <CardContent>
@@ -267,7 +260,7 @@ const CreateToken: React.FC<Props> = () => {
             <div className="grid items-center gap-2">
               <div>
                 <Label>
-                  {$t("tools.token-pubkey")}:{mint?.toString()}
+                  {$t("tools.token-pubkey")}:{tokenATA?.toString()}
                 </Label>
               </div>
               <p className="text-muted-foreground flex text-sm">

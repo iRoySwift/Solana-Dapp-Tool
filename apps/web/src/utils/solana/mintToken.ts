@@ -20,6 +20,7 @@ import {
 } from "@solana/web3.js";
 import {
   createCreateMetadataAccountV3Instruction,
+  createUpdateMetadataAccountV2Instruction,
   PROGRAM_ID,
 } from "@metaplex-foundation/mpl-token-metadata";
 
@@ -108,8 +109,63 @@ const createMetadataInstruction = (
           uses: null,
           collection: null,
         },
-        isMutable: false,
+        isMutable: true,
         collectionDetails: null,
+      },
+    }
+  );
+  return instruction;
+};
+
+/**
+ * 创建Token info
+ * @param owner            Owner of the new account
+ * @param mint             Token mint account
+ * @param name             Token name
+ * @param symbol           Token symbol
+ * @param uri              metadata url
+ * @returns
+ */
+const updateMetadataInstruction = (
+  owner: PublicKey,
+  mint: PublicKey,
+  name: string,
+  symbol: string,
+  uri: string
+): TransactionInstruction => {
+  const instruction = createUpdateMetadataAccountV2Instruction(
+    {
+      metadata: PublicKey.findProgramAddressSync(
+        [Buffer.from("metadata"), PROGRAM_ID.toBuffer(), mint.toBuffer()],
+        PROGRAM_ID
+      )[0],
+      updateAuthority: owner,
+    },
+    {
+      updateMetadataAccountArgsV2: {
+        data: {
+          name,
+          symbol,
+          uri,
+          creators: [
+            {
+              address: mint,
+              verified: false,
+              share: 0,
+            },
+            {
+              address: owner,
+              verified: false,
+              share: 100,
+            },
+          ],
+          sellerFeeBasisPoints: 0,
+          uses: null,
+          collection: null,
+        },
+        updateAuthority: owner,
+        primarySaleHappened: true,
+        isMutable: true,
       },
     }
   );
@@ -151,5 +207,6 @@ const mintTokenInstructions = async (
 export {
   createTokenInstructions,
   createMetadataInstruction,
+  updateMetadataInstruction,
   mintTokenInstructions,
 };

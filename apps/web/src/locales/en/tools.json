@@ -13,11 +13,14 @@
   "sol-balance": "SOL Balance",
   "solana-desc": "Solana ecosystem tool set, including functions such as transferring SOL to other addresses, checking SOL balance, and checking transaction records",
   "solana-tools": "Solana Tools",
+  "token-mint-address": "Token Mint Address",
   "transfer-quantity": "Transfer quantity",
   "transfer-quantity-is-required": "Quantity is required",
   "transfer-quantity-must-be-greater-than-0": "transfer quantity must be greater than 0",
   "transfer-sol": "Transfer SOL",
   "transfer-sol-desc": "To transfer SOL to another address, it is necessary to connect the wallet, check the balance, and request AirDrop functions",
   "transfer-sol-to-other-address": "Transfer SOL to other address",
+  "update-metadata": "Update Metadata",
+  "update-metadata-desc": "update token name 、url",
   "you-submitted-the-following-values": "You submitted the following values"
 }
