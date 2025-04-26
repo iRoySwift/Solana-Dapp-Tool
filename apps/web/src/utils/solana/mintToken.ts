@@ -1,121 +1,155 @@
 import {
   MINT_SIZE,
+  TOKEN_2022_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
   createInitializeMint2Instruction,
+  createInitializeMintInstruction,
   createMintToInstruction,
   getAccount,
-  getAssociatedTokenAddressSync,
+  getAssociatedTokenAddress,
   getMinimumBalanceForRentExemptMint,
 } from "@solana/spl-token";
-import type { WalletAdapterProps } from "@solana/wallet-adapter-base";
 import {
   Keypair,
+  PublicKey,
   SystemProgram,
   type Connection,
-  type PublicKey,
   TransactionInstruction,
+  LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
-import { createAndSendV0TxByWallet } from "./sendTransaction";
+import {
+  createCreateMetadataAccountV3Instruction,
+  PROGRAM_ID,
+} from "@metaplex-foundation/mpl-token-metadata";
 
 /**
  * 创建Token
  * @param connection       Connection to use from useWallet
- * @param pubkey           Payer of the transaction and initialization fees
- * @param sendTransaction  from useWallet
+ * @param owner            Owner of the new account
+ * @param mint             Token mint account
+ * @param amount           supply Amount to mint
+ * @param decimals         Number of decimals in token account amounts
  * @returns
  */
-const createToken = async (
+const createTokenInstructions = async (
   connection: Connection,
-  pubkey: PublicKey,
-  sendTransaction: WalletAdapterProps["sendTransaction"]
-): Promise<PublicKey> => {
-  const mintKeypair = Keypair.generate();
+  owner: PublicKey,
+  mint: PublicKey,
+  amount: number,
+  decimals: number
+): Promise<TransactionInstruction[]> => {
+  console.log("🚀 ~ decimals:", decimals);
+  const lamports = await getMinimumBalanceForRentExemptMint(connection);
+  const tokenATA = await getAssociatedTokenAddress(mint, owner);
 
   // * Step 1 - create an array with your desires `instructions`
-
-  const lamports = await getMinimumBalanceForRentExemptMint(connection);
   const instructions = [
     SystemProgram.createAccount({
-      fromPubkey: pubkey,
-      newAccountPubkey: mintKeypair.publicKey,
+      fromPubkey: owner,
+      newAccountPubkey: mint,
       space: MINT_SIZE,
       lamports,
       programId: TOKEN_PROGRAM_ID,
     }),
-    createInitializeMint2Instruction(mintKeypair.publicKey, 9, pubkey, pubkey),
+    createInitializeMintInstruction(
+      mint,
+      decimals,
+      owner,
+      owner,
+      TOKEN_PROGRAM_ID
+    ),
+    createAssociatedTokenAccountInstruction(owner, tokenATA, owner, mint),
+    createMintToInstruction(
+      mint,
+      tokenATA,
+      owner,
+      amount * Math.pow(10, decimals)
+    ),
   ];
-  console.log(
-    "   ✅ - Step 1 - create an array with your desires `instructions`"
-  );
+  return instructions;
+};
 
-  // * Step 2 - Generate a transaction and send it to the network
-  const txid = await createAndSendV0TxByWallet(
-    pubkey,
-    connection,
-    sendTransaction,
-    instructions,
-    [mintKeypair]
+/**
+ * 创建Token info
+ * @param owner            Owner of the new account
+ * @param mint             Token mint account
+ * @param name             Token name
+ * @param symbol           Token symbol
+ * @param uri              metadata url
+ * @returns
+ */
+const createMetadataInstruction = (
+  owner: PublicKey,
+  mint: PublicKey,
+  name: string,
+  symbol: string,
+  uri: string
+): TransactionInstruction => {
+  const instruction = createCreateMetadataAccountV3Instruction(
+    {
+      metadata: PublicKey.findProgramAddressSync(
+        [Buffer.from("metadata"), PROGRAM_ID.toBuffer(), mint.toBuffer()],
+        PROGRAM_ID
+      )[0],
+      mint,
+      mintAuthority: owner,
+      payer: owner,
+      updateAuthority: owner,
+    },
+    {
+      createMetadataAccountArgsV3: {
+        data: {
+          name,
+          symbol,
+          uri,
+          creators: null,
+          sellerFeeBasisPoints: 0,
+          uses: null,
+          collection: null,
+        },
+        isMutable: false,
+        collectionDetails: null,
+      },
+    }
   );
-  console.log(
-    "   ✅ - Step 2 - Generate a transaction and send it to the network"
-  );
-
-  console.log("🎉 Transaction succesfully confirmed!");
-  console.log(`https://explorer.solana.com/tx/${txid}?cluster=devnet`);
-  return mintKeypair.publicKey;
+  return instruction;
 };
 
 /**
  * Mint Token
  * @param connection      Connection to use from useWallet
- * @param pubkey          Payer of the transaction and initialization fees
+ * @param owner           Owner of the new account
  * @param mint            Mint Address
- * @param toPubkey        Address to mint to
  * @param amount          Amount to mint
- * @param sendTransaction from useWallet
+ * @param decimals         Number of decimals in token account amounts
  * @returns
  */
-const mintToken = async (
+const mintTokenInstructions = async (
   connection: Connection,
-  pubkey: PublicKey,
+  owner: PublicKey,
   mint: PublicKey,
-  toPubkey: PublicKey,
   amount: number,
-  sendTransaction: WalletAdapterProps["sendTransaction"]
-): Promise<{
-  ata: PublicKey;
-  txid: string;
-}> => {
+  decimals: number = 9
+): Promise<TransactionInstruction[]> => {
   // * Step 1 - create an array with your desires `instructions`
   // 获取ATA账号
-  const ata = getAssociatedTokenAddressSync(mint, toPubkey);
+  const tokenATA = await getAssociatedTokenAddress(mint, owner);
 
   let instructions: TransactionInstruction[] = [];
   try {
-    await getAccount(connection, ata);
+    await getAccount(connection, tokenATA);
   } catch (error) {
-    // 创建AYTA
     instructions.push(
-      createAssociatedTokenAccountInstruction(pubkey, ata, toPubkey, mint)
+      createAssociatedTokenAccountInstruction(owner, tokenATA, owner, mint)
     );
   }
-  instructions.push(createMintToInstruction(mint, ata, pubkey, amount));
-
-  // * Step 2 - Generate a transaction and send it to the network
-  const txid = await createAndSendV0TxByWallet(
-    pubkey,
-    connection,
-    sendTransaction,
-    instructions
-  );
-  console.log(
-    "   ✅ - Step 2 - Generate a transaction and send it to the network"
-  );
-
-  console.log("🎉 Transaction succesfully confirmed!");
-  console.log(`https://explorer.solana.com/tx/${txid}?cluster=devnet`);
-  return { ata, txid };
+  instructions.push(createMintToInstruction(mint, tokenATA, owner, amount));
+  return instructions;
 };
 
-export { createToken, mintToken };
+export {
+  createTokenInstructions,
+  createMetadataInstruction,
+  mintTokenInstructions,
+};

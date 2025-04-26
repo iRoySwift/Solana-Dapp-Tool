@@ -1,41 +1,45 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import { createToken, mintToken } from "@/utils/solana/mintToken";
+import { useForm } from "@iroy/hooks/react-hook-form";
+import { getI18n } from "@iroy/i18n";
+import { Lang } from "@iroy/i18n/config";
+import { useI18nStore } from "@iroy/i18n/store";
+import { toast } from "@iroy/ui";
+import { Button } from "@iroy/ui/components/button";
 import {
   Card,
-  CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
+  CardDescription,
+  CardContent,
 } from "@iroy/ui/components/card";
-import { Input } from "@iroy/ui/components/input";
-import { Label } from "@iroy/ui/components/label";
-import { Button } from "@iroy/ui/components/button";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
-import { z, zodResolver } from "@iroy/ui/zod";
-import { validateSolAddress } from "@/utils/solana/valid";
-import { useForm } from "@iroy/hooks/react-hook-form";
 import {
   Form,
+  FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
-  FormDescription,
   FormMessage,
 } from "@iroy/ui/components/form";
-import { toast } from "@iroy/ui";
-import { debounce } from "@iroy/utils/lodash-es";
+import { Input } from "@iroy/ui/components/input";
+import { Label } from "@iroy/ui/components/label";
+import { z, zodResolver } from "@iroy/ui/zod";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import React, { useState } from "react";
 import WalletButton from "../wallet/WalletButton";
 import { Wallet as WalletIcon } from "@iroy/ui/icons";
-import { createAndSendV0TxByWallet } from "@/utils/solana/sendTransaction";
-import { useI18nStore } from "@iroy/i18n/store";
+import { validateSolAddress } from "@/utils/solana/valid";
 
 interface Props {}
-const TransferSol: React.FC<Props> = () => {
+const TransferToken: React.FC<Props> = () => {
   const { connection } = useConnection();
   const { publicKey: pubkey, sendTransaction } = useWallet();
-  const [balance, setBalance] = useState(0);
+  const [mint, setMint] = useState<PublicKey>();
+  const [balance, setBalance] = useState<number | null>();
+  let [ata, setAta] = useState<PublicKey>();
+
   const { $t } = useI18nStore();
 
   const FormSchema = z
@@ -69,98 +73,74 @@ const TransferSol: React.FC<Props> = () => {
     },
   });
 
-  const updateBalance = useCallback(
-    debounce(async (pubkey: PublicKey | null) => {
-      setBalance(0);
-      if (!pubkey) return;
-      try {
-        connection.onAccountChange(
-          pubkey,
-          updatedAccountInfo => {
-            setBalance(updatedAccountInfo.lamports / LAMPORTS_PER_SOL);
-          },
-          {
-            commitment: "confirmed",
-          }
-        );
-
-        const accountInfo = await connection.getAccountInfo(pubkey);
-
-        if (accountInfo) {
-          setBalance(accountInfo.lamports / LAMPORTS_PER_SOL);
-        } else {
-          throw new Error("Account info not found");
-        }
-      } catch (error) {
-        console.error("Failed to retrieve account info:", error);
-      }
-    }, 300),
-    [connection]
-  );
-
   const goToSolanaExplorer = (txid?: string) => {
     window.open(`https://explorer.solana.com/tx/${txid}?cluster=devnet`);
   };
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
+  const handleCreateToken = async () => {
+    if (!pubkey) {
+      toast.warning($t("tools.please-connect-your-wallet"));
+      return;
+    }
+    const mint = await createToken(connection, pubkey, sendTransaction);
+    setMint(mint);
+    console.log(`   ✅ - Token mint address: ${mint.toBase58()}`);
+  };
+
+  const onSubmit = async () => {
     if (!pubkey) return;
-    const txInstruction = [
-      SystemProgram.transfer({
-        fromPubkey: pubkey,
-        toPubkey: new PublicKey(form.getValues().toPubkey),
-        lamports: form.getValues().amount * LAMPORTS_PER_SOL,
-      }),
-    ];
-    const txid = await createAndSendV0TxByWallet(
-      pubkey,
+    if (!mint) return;
+    const { ata, txid } = await mintToken(
       connection,
-      sendTransaction,
-      txInstruction
+      pubkey,
+      mint,
+      new PublicKey(form.getValues().toPubkey),
+      form.getValues().amount * LAMPORTS_PER_SOL,
+      sendTransaction
     );
-    toast.success($t("tools.you-submitted-the-following-values"), {
-      description: (
-        <pre className="mt-2 rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    setAta(ata);
+    toast.success("Transaction succesfully confirmed!", {
+      description: `Transaction:${txid}`,
       action: {
         label: $t("common.view"),
         onClick: () => goToSolanaExplorer(txid),
       },
     });
-  }
+  };
 
-  useEffect(() => {
-    updateBalance(pubkey);
-  }, [pubkey]);
+  const handleQuery = async () => {
+    if (!ata) {
+      toast.warning("Unable to obtain ATA account for Token!");
+      return;
+    }
+    let balance = await connection.getTokenAccountBalance(ata);
+    setBalance(balance.value.uiAmount);
+  };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{$t("tools.transfer-sol")}</CardTitle>
-        <CardDescription>{$t("tools.transfer-sol-desc")}</CardDescription>
+        <CardTitle>{$t("tools.transfer-token")}</CardTitle>
+        <CardDescription>
+          {$t("tools.transfer-token-to-other-address")}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
-            <div className="grid gap-2">
-              <Label>{$t("tools.current-wallet-address")}:</Label>
-              <p className="text-muted-foreground text-sm">
-                {pubkey
-                  ? new PublicKey(pubkey).toString()
-                  : $t("tools.not-connected")}
-              </p>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="balance">{$t("tools.sol-balance")}:</Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  id="balance"
-                  value={balance}
-                  readOnly
-                  placeholder={$t("tools.sol-balance")}
-                />
+            <div className="grid items-center gap-2">
+              <div>
+                <Label>Token address:</Label>
               </div>
+              <p className="text-muted-foreground flex text-sm">
+                {mint ? (
+                  <div>{mint?.toBase58()}</div>
+                ) : (
+                  <Button size="sm" type="button" onClick={handleCreateToken}>
+                    Create Token
+                  </Button>
+                )}
+              </p>
             </div>
             <FormField
               control={form.control}
@@ -208,10 +188,24 @@ const TransferSol: React.FC<Props> = () => {
                 </Button>
               </WalletButton>
             )}
+            <div className="grid items-center gap-2">
+              <div>
+                <Label>查询接收钱包Token balance:</Label>
+              </div>
+              <p className="text-muted-foreground flex text-sm">
+                {balance ? (
+                  <div>{balance}</div>
+                ) : (
+                  <Button size="sm" type="button" onClick={handleQuery}>
+                    Query Token
+                  </Button>
+                )}
+              </p>
+            </div>
           </form>
         </Form>
       </CardContent>
     </Card>
   );
 };
-export default TransferSol;
+export default TransferToken;

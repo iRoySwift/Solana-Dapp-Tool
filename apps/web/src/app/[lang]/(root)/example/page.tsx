@@ -1,6 +1,7 @@
 import PageHeader from "@/components/PageHeader";
 import PageHeaderDescription from "@/components/PageHeaderDescription";
 import PageHeaderHeading from "@/components/PageHeaderHeading";
+import AirdropToken from "@/components/example/AirdropToken";
 import CreateToken from "@/components/example/CreateToken";
 import TransferSol from "@/components/example/TransferSol";
 import { getI18n } from "@iroy/i18n";
@@ -23,6 +24,7 @@ const BaseTransfer: React.FC<Props> = async ({ params }) => {
       <div className="container-wrapper border-grid py-6">
         <section className="container">
           <div className="grid gap-4 md:grid-cols-2">
+            <AirdropToken />
             <TransferSol />
             <CreateToken />
           </div>

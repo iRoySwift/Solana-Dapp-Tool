@@ -130,23 +130,27 @@ async function createAndSendV0TxByWallet(
 
   // * Step 3 - Sign your transaction with the required `Signers`
   const transaction = new VersionedTransaction(messageV0);
-  // transaction.sign([signer]);
   console.log("   ✅ - 3. Transaction Signed");
 
   // * Step 4 - Send our v0 transaction to the cluster
   const txid = await sendTransaction(transaction, connection, {
     maxRetries: 5,
+    skipPreflight: true, // 跳过预检查以加快交易速度
+    preflightCommitment: "confirmed", // 使用 "confirmed" 而不是默认的 "finalized"
     minContextSlot,
     signers,
   });
   console.log("   ✅ - 4. Transaction sent to network");
 
   // * Step 5 - Confirm Transaction
-  const confirmation = await connection.confirmTransaction({
-    signature: txid,
-    blockhash,
-    lastValidBlockHeight,
-  });
+  const confirmation = await connection.confirmTransaction(
+    {
+      signature: txid,
+      blockhash,
+      lastValidBlockHeight,
+    },
+    "confirmed"
+  );
   if (confirmation.value.err) {
     throw new Error("   ❌ - 5. Transaction not confirmed.");
   }

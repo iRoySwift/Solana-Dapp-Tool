@@ -108,13 +108,11 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "application.shellEnvironmentResolutionTimeout": 20,
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml"
   },
   "diffEditor.ignoreTrimWhitespace": true,
   "git.ignoreRebaseWarning": true,
-  "terminal.integrated.fontLigatures": true,
   "files.autoSave": "afterDelay",
   "vue.autoInsert.dotValue": true,
   "vue.codeActions.enabled": false,
