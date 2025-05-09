@@ -45,5 +45,7 @@
   "update-metadata": "修改元数据",
   "update-metadata-desc": "修改Token名称、符号、元数据链接地址",
   "token-mint-address": "Token铸造地址",
-  "metadata-url": "元数据地址"
+  "metadata-url": "元数据地址",
+  "get-metadata": "获取元数据",
+  "get-metadata-desc": "获取Token名称、符号、元数据链接地址"
 }

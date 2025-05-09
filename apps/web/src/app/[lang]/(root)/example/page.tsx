@@ -3,6 +3,7 @@ import PageHeaderDescription from "@/components/PageHeaderDescription";
 import PageHeaderHeading from "@/components/PageHeaderHeading";
 import AirdropToken from "@/components/example/AirdropToken";
 import CreateToken from "@/components/example/CreateToken";
+import GetTokenMetadata from "@/components/example/GetTokenMetadata";
 import TransferSol from "@/components/example/TransferSol";
 import UpdateMetadata from "@/components/example/UpdateMetadata";
 import { getI18n } from "@iroy/i18n";
@@ -29,6 +30,7 @@ const BaseTransfer: React.FC<Props> = async ({ params }) => {
             <TransferSol />
             <CreateToken />
             <UpdateMetadata />
+            <GetTokenMetadata />
           </div>
         </section>
       </div>
